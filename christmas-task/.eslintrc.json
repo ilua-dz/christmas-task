@@ -1,14 +1,21 @@
 {
+  "root": true,
+
+  "parser": "@typescript-eslint/parser",
+
+  "plugins": ["@typescript-eslint", "prettier", "import"],
+
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended"
+  ],
+
   "env": {
     "browser": true,
     "es2021": true
   },
-  "extends": [
-    "airbnb-base",
-    "eslint:recommended",
-    "plugin:@typescript-eslint/recommended",
-    "prettier"
-  ],
+
   "parserOptions": {
     "ecmaFeatures": {
       "jsx": true
@@ -16,7 +23,7 @@
     "ecmaVersion": 12,
     "sourceType": "module"
   },
-  "plugins": ["@typescript-eslint", "prettier", "import"],
+
   "rules": {
     "prettier/prettier": "error",
     "@typescript-eslint/no-explicit-any": 2

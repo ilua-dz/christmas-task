@@ -29,7 +29,8 @@
   "scripts": {
     "dev": "webpack --mode development",
     "build": "webpack --mode production",
-    "start": "webpack serve --open --config ./webpack.config.js --env mode=dev"
+    "start": "webpack serve --open --config ./webpack.config.js --env mode=dev",
+    "lint": "eslint . --ext .ts & tsc --noEmit"
   },
   "author": "Ilya Dzyuin",
   "license": "ISC"
