@@ -4,15 +4,18 @@ import { PageIds } from '../../../pages/app';
 const buttons = [
   {
     id: PageIds.startPage,
-    text: 'Start Page',
+    icon: '<i class="fa-thin fa-star-christmas"></i>',
+    text: 'Главная',
   },
   {
     id: PageIds.toysPage,
-    text: 'Toys Page',
+    icon: '<i class="fa-thin fa-ornament"></i>',
+    text: 'Выбор игрушек',
   },
   {
     id: PageIds.gamePage,
-    text: 'Game Page',
+    icon: '<i class="fa-thin fa-tree-christmas"></i>',
+    text: 'Наряди ёлку!',
   },
 ];
 
@@ -25,8 +28,13 @@ class Header extends Component {
     const buttonsContainer = document.createElement('div');
     buttons.forEach((button) => {
       const buttonHTML = document.createElement('a');
+      buttonHTML.classList.add('button');
+      const buttonDescription = document.createElement('p');
+      buttonDescription.classList.add('button__description');
+      buttonDescription.textContent = button.text;
       buttonHTML.href = `#${button.id}`;
-      buttonHTML.textContent = button.text;
+      buttonHTML.innerHTML = button.icon;
+      buttonHTML.append(buttonDescription);
       buttonsContainer.append(buttonHTML);
     });
     this.container.append(buttonsContainer);
