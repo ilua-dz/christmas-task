@@ -1,5 +1,6 @@
 abstract class Page {
   protected container: HTMLElement;
+  public id: string;
   static titlesObject = {
     startPage: 'Новогодняя игра',
     toysPage: 'Выбор игрушек',
@@ -10,6 +11,7 @@ abstract class Page {
   constructor(id: string) {
     this.container = document.createElement('div');
     this.container.id = id;
+    this.id = id;
   }
 
   protected createTitle(text: string) {

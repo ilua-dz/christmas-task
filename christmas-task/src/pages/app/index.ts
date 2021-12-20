@@ -4,6 +4,7 @@ import ToysPage from '../toy-selection-page';
 import GamePage from '../game-page';
 import ErrorPage from '../error';
 import Header from '../../core/components/header';
+import Footer from '../../core/components/footer';
 
 export const enum PageIds {
   startPage = 'start',
@@ -15,6 +16,7 @@ export const enum PageIds {
 class App {
   private static container: HTMLElement = document.body;
   private header: Header;
+  private footer: Footer;
 
   static renderNewPage(idPage: string) {
     const currentPageHTML = document.querySelector(`#${PageIds.defaultPageID}`);
@@ -39,6 +41,7 @@ class App {
     if (page) {
       const pageHTML = page.render();
       pageHTML.id = PageIds.defaultPageID;
+      pageHTML.className = `${page.id}-page`;
       App.container.append(pageHTML);
     }
   }
@@ -56,11 +59,13 @@ class App {
 
   constructor() {
     this.header = new Header('header', 'header');
+    this.footer = new Footer('footer', 'footer');
   }
 
   run() {
     App.container.append(this.header.render());
     this.enableRouteChange();
+    App.container.append(this.footer.render());
   }
 }
 

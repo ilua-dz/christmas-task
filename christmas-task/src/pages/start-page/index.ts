@@ -7,7 +7,11 @@ class StartPage extends Page {
 
   render() {
     const title = this.createTitle(Page.titlesObject.startPage);
-    this.container.append(title);
+    const message = document.createElement('h2');
+    message.classList.add('message');
+    message.textContent =
+      'Функционал приложения дорабатывается. Прошу приступить к кросс-чек ревью не раньше 23.12.2021';
+    this.container.append(title, message);
     return this.container;
   }
 }
