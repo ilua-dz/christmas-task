@@ -9,7 +9,7 @@ const buttons = [
   },
   {
     id: PageIds.toysPage,
-    icon: '<i class="fa-thin fa-ornament"></i>',
+    icon: '<i class="fa-thin fa-ornament amount-selected-toys"></i>',
     text: 'Выбор игрушек',
   },
   {
@@ -28,7 +28,7 @@ class Header extends Component {
     const buttonsContainer = document.createElement('div');
     buttons.forEach((button) => {
       const buttonHTML = document.createElement('a');
-      buttonHTML.classList.add('button');
+      buttonHTML.classList.add('button', 'header-button');
       const buttonDescription = document.createElement('p');
       buttonDescription.classList.add('button__description');
       buttonDescription.textContent = button.text;

@@ -50,7 +50,13 @@ class ToyCard extends Component {
         propertyValue = propertyValue ? 'Да' : 'Нет';
       }
 
-      propertyHTML.textContent = `${property.title}: ${propertyValue}`;
+      const propertyValueHTML = document.createElement('span');
+      propertyValueHTML.className = 'toy-property-value';
+      propertyValueHTML.textContent = propertyValue;
+
+      propertyHTML.textContent = `${property.title}: `;
+      propertyHTML.append(propertyValueHTML);
+
       toyDescriptionHTML.append(propertyHTML);
     });
 

@@ -16,18 +16,62 @@ const getRepeatCategoryFiltersAmount = () => {
 class ToysBlock extends Component {
   protected toySet: IToyDescription[];
   protected displayIsFavouriteOnly: boolean;
+  public selectedToys: IToyDescription[];
 
   constructor(tagName: string, className: string) {
     super(tagName, className + ' no-border');
     this.toySet = [];
     this.displayIsFavouriteOnly = false;
+    this.selectedToys = [];
+  }
+
+  enableChooseToy(
+    toyCardHTML: HTMLElement,
+    cardDescriptionObject: IToyDescription
+  ) {
+    toyCardHTML.addEventListener('click', () => {
+      if (!toyCardHTML.classList.contains('selected-toy')) {
+        if (this.selectedToys.length < 20) {
+          this.selectedToys.push(cardDescriptionObject);
+          toyCardHTML.classList.add('selected-toy');
+        } else this.renderChooseToyError();
+      } else {
+        this.selectedToys.splice(
+          this.selectedToys.indexOf(cardDescriptionObject),
+          1
+        );
+        toyCardHTML.classList.remove('selected-toy');
+      }
+      (
+        document.querySelector('.amount-selected-toys') as HTMLElement
+      ).textContent = this.selectedToys.length
+        ? ` ${this.selectedToys.length}`
+        : '';
+    });
+  }
+
+  private renderChooseToyError() {
+    const popupHTML = document.createElement('div');
+    popupHTML.className = 'popup';
+    popupHTML.textContent = 'Выбрано максимальное количество игрушек';
+    this.container.append(popupHTML);
+    setTimeout(() => {
+      popupHTML.style.opacity = '1';
+    }, 50);
+    setTimeout(() => {
+      popupHTML.style.opacity = '0';
+    }, 2000);
+    setTimeout(() => {
+      popupHTML.remove();
+    }, 2500);
   }
 
   renderCards(...cardNumbers: number[]) {
     cardNumbers.forEach((n) => {
-      const card = new ToyCard('div', 'toy-card');
+      const card = new ToyCard('div', 'button toy-card');
       card.renderCard(n);
       const cardHTML = card.render();
+      this.enableChooseToy(cardHTML, card.toyDescriptionObject);
       this.container.append(cardHTML);
       this.toySet.push(card.toyDescriptionObject);
     });
