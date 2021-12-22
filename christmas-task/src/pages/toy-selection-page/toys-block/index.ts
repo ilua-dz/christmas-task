@@ -15,13 +15,13 @@ const getRepeatCategoryFiltersAmount = () => {
 
 class ToysBlock extends Component {
   protected toySet: IToyDescription[];
-  protected displayIsFavouriteOnly: boolean;
+  protected displayFavouriteOnly: boolean;
   public selectedToys: IToyDescription[];
 
   constructor(tagName: string, className: string) {
     super(tagName, className + ' no-border');
     this.toySet = [];
-    this.displayIsFavouriteOnly = false;
+    this.displayFavouriteOnly = false;
     this.selectedToys = [];
   }
 
@@ -112,7 +112,7 @@ class ToysBlock extends Component {
   }
 
   private applyFavouriteFilter(card: HTMLElement) {
-    if (!this.displayIsFavouriteOnly) card.classList.remove('display-0');
+    if (!this.displayFavouriteOnly) card.classList.remove('display-0');
     else if (card.getAttribute('data-favorite'))
       card.classList.remove('display-0');
   }
@@ -125,8 +125,21 @@ class ToysBlock extends Component {
     } else this.container.querySelector('h2')?.remove();
   }
 
+  filterCardsByRange(propertyName: string, values: number[]) {
+    this.container
+      .querySelectorAll('.toy-card')
+      .forEach((card: HTMLElement) => {
+        const propertyValue = +(card.getAttribute(
+          `data-${propertyName}`
+        ) as string);
+        if (propertyValue >= values[0] && propertyValue <= values[1])
+          card.style.display = '';
+        else card.style.display = 'none';
+      });
+  }
+
   filterCards() {
-    this.displayIsFavouriteOnly = document
+    this.displayFavouriteOnly = document
       .querySelector('.favourite-filter-option')
       ?.classList.contains('selected-option') as boolean;
 

@@ -3,6 +3,8 @@ import HTMLElements from '../../core/utils/html-elements';
 import DisplaySettings from './display-settings-block';
 import ToysBlock from './toys-block';
 
+import { target as noUiSliderTarget } from 'nouislider';
+
 class ToysPage extends Page {
   private displaySettings: DisplaySettings;
   private toysBlock: ToysBlock;
@@ -27,11 +29,13 @@ class ToysPage extends Page {
       this.toysBlock.render()
     );
     this.enableSorting();
-    this.enableFiltering();
+    this.enableFilteringByValues();
+    this.enableFilteringByRange('count');
+    this.enableFilteringByRange('year');
     return this.container;
   }
 
-  enableSorting() {
+  private enableSorting() {
     HTMLElements.sortByNameBtn(this.container)?.addEventListener(
       'click',
       (e) => {
@@ -54,10 +58,21 @@ class ToysPage extends Page {
     );
   }
 
-  enableFiltering() {
+  private enableFilteringByValues() {
     HTMLElements.filterOptionBtns(this.container)?.forEach((btn) =>
       btn.addEventListener('click', () => this.toysBlock.filterCards())
     );
+  }
+
+  private enableFilteringByRange(propertyName: string) {
+    const inputSlider = this.container.querySelector(
+      `#${propertyName}-range-input`
+    ) as noUiSliderTarget;
+
+    inputSlider.noUiSlider?.on('update', () => {
+      const values = inputSlider.noUiSlider?.get() as number[];
+      this.toysBlock.filterCardsByRange(propertyName, values);
+    });
   }
 }
 

@@ -1,4 +1,8 @@
 import Component from '../../../core/templates/component';
+import { getMinMaxToyPropertyValue } from '../../../libs/data';
+
+import noUiSlider from 'nouislider';
+import { target as noUiSliderTarget } from 'nouislider';
 
 const sortingOptions = [
   {
@@ -129,13 +133,23 @@ class DisplaySettings extends Component {
     const filterByColorModule = this.renderFilterByColorOptions();
     const filterBySizeModule = this.renderFilterBySizeOptions();
     const filterByFavouriteModule = this.renderFavouriteOnlyOption();
+    const filterByCountModule = this.renderRangeFilterOption(
+      'Количеству:',
+      'count'
+    );
+    const filterByYearModule = this.renderRangeFilterOption(
+      'Году&nbsp;покупки:',
+      'year'
+    );
 
     this.container.append(
       blockTitle,
       filterByShapeModule,
       filterByColorModule,
       filterBySizeModule,
-      filterByFavouriteModule
+      filterByFavouriteModule,
+      filterByCountModule,
+      filterByYearModule
     );
   }
 
@@ -144,7 +158,7 @@ class DisplaySettings extends Component {
     module.className = className;
 
     const moduleNameString = document.createElement('div');
-    moduleNameString.textContent = moduleName;
+    moduleNameString.innerHTML = moduleName;
     module.append(moduleNameString);
 
     return module;
@@ -236,6 +250,47 @@ class DisplaySettings extends Component {
 
     filterByFavouriteModule.append(optionBlock);
     return filterByFavouriteModule;
+  }
+
+  private renderRangeFilterOption(
+    moduleName: string,
+    property: string,
+    rangeSliderIdName = `${property}-range-input`
+  ) {
+    const optionHTML = this.renderModule('range-filter-block', moduleName);
+
+    const minValue = document.createElement('div');
+    minValue.className = 'range-filter-value';
+
+    const maxValue = document.createElement('div');
+    maxValue.className = 'range-filter-value';
+
+    const optionBlock: noUiSliderTarget = document.createElement('div');
+    optionBlock.className = 'range-slider-container';
+    optionBlock.id = rangeSliderIdName;
+    noUiSlider.create(optionBlock, {
+      start: getMinMaxToyPropertyValue(property),
+      connect: true,
+      step: 1,
+      behaviour: 'drag-tap',
+      range: {
+        min: getMinMaxToyPropertyValue(property)[0],
+        max: getMinMaxToyPropertyValue(property)[1],
+      },
+      format: {
+        to: (value) => Math.round(value),
+        from: (value) => Number(value),
+      },
+    });
+
+    optionBlock.noUiSlider?.on('update', () => {
+      const sliderValues = optionBlock.noUiSlider?.get() as number[];
+      minValue.textContent = `${sliderValues[0]}`;
+      maxValue.textContent = `${sliderValues[1]}`;
+    });
+
+    optionHTML.append(minValue, optionBlock, maxValue);
+    return optionHTML;
   }
 }
 

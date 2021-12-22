@@ -33,5 +33,8 @@
     "lint": "eslint . --ext .ts & tsc --noEmit"
   },
   "author": "Ilya Dzyuin",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "nouislider": "^15.5.0"
+  }
 }

@@ -1,6 +1,7 @@
 @import url('https://pro.fontawesome.com/releases/v6.0.0-beta2/css/all.css');
 @import url('https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap');
 /* @import url('https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css'); */
+/* @import url('https://cdn.jsdelivr.net/gh/Dogfalo/materialize@master/extras/noUiSlider/nouislider.css'); */
 
 @font-face {
   font-family: 'sunday';
@@ -14,6 +15,7 @@
   --neon-red-color: #f72119;
   --neon-green-color: #39ff14;
   --neon-yellow-color: #fff01f;
+  --button-color: rgba(190, 213, 213, 0.3);
 }
 
 .display-0 {
@@ -195,7 +197,8 @@ body {
 
 .sort-option,
 .size-filter-option,
-.favourite-filter-option {
+.favourite-filter-option,
+.range-filter-value {
   width: 35%;
   padding: 8px;
   display: flex;
@@ -263,6 +266,19 @@ body {
 
 .size-filter-option {
   width: 23%;
+}
+
+.range-filter-block {
+  margin-bottom: 2vh;
+  display: flex;
+  align-items: center;
+  gap: 2vh;
+}
+
+.range-slider-container {
+  width: 60%;
+  margin: 0 auto;
+  margin-top: 1%;
 }
 
 .toys-block {
@@ -341,4 +357,35 @@ body {
 
 .message {
   color: var(--neon-yellow-color);
+}
+
+.noUi-target {
+  height: 1vh;
+  padding-right: 4%;
+  background: var(--button-color);
+  border: none;
+  box-shadow: none;
+}
+
+.noUi-handle::after,
+.noUi-handle::before {
+  display: none;
+}
+
+.noUi-horizontal .noUi-handle {
+  height: 2vh;
+  width: 2vh;
+  border-radius: 50%;
+  border: none;
+  box-shadow: none;
+  background-color: var(--hl-text-color);
+  cursor: pointer;
+}
+
+.noUi-connect {
+  background-color: var(--main-font-color);
+}
+
+.range-filter-value {
+  width: 10%;
 }

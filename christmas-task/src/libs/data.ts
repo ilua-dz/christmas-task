@@ -10,6 +10,11 @@ export interface IToyDescription {
   favorite: boolean;
 }
 
+export const getMinMaxToyPropertyValue = (property: string) => {
+  const numbers = data.map((toy) => +toy[property]).sort((a, b) => a - b);
+  return [numbers[0], numbers[numbers.length - 1]];
+};
+
 const data: IToyDescription[] = [
   {
     num: '1',
