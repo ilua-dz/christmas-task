@@ -118,7 +118,12 @@ class ToysBlock extends Component {
   }
 
   private displayFilterError() {
-    if (this.container.querySelectorAll('.display-0').length === 60) {
+    const cardArray = Array.from(this.container.childNodes);
+    const filteredToyCardCount = cardArray
+      .map((card: HTMLElement) => getComputedStyle(card).display === 'none')
+      .reduce((sum, current) => +sum + +current, 0);
+
+    if (filteredToyCardCount >= 60) {
       const message = document.createElement('h2');
       message.textContent = 'По введенным параметрам игрушки не найдены.';
       this.container.append(message);
@@ -141,7 +146,7 @@ class ToysBlock extends Component {
   filterCardsByValue() {
     this.displayFavouriteOnly = document
       .querySelector('.favourite-filter-option')
-      ?.classList.contains('selected-option') as boolean;
+      ?.classList.contains('active-favourite-option') as boolean;
 
     if (HTMLElements.activeFilters().length > 0) this.applyFilters();
     else this.unfilter();
@@ -158,6 +163,21 @@ class ToysBlock extends Component {
           card.classList.add('filtered-by-search');
         else card.classList.remove('filtered-by-search');
       });
+    this.displayFilterError();
+  }
+
+  resetFilters() {
+    this.container
+      .querySelectorAll('.toy-card')
+      .forEach((card: HTMLElement) => {
+        card.classList.remove(
+          'display-0',
+          'filtered-by-count-range',
+          'filtered-by-year-range',
+          'filtered-by-search'
+        );
+      });
+    this.displayFilterError();
   }
 }
 

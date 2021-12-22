@@ -103,17 +103,17 @@ class DisplaySettings extends Component {
       optionBlock.append(optionIcon);
 
       optionBlock.addEventListener('click', () => {
-        if (optionBlock.classList.contains('selected-option')) {
+        if (optionBlock.classList.contains('active-sort-option')) {
           toggleId(optionBlock, option.buttonId, option.reversButtonId);
           optionIcon.classList.toggle(option.forwardDirectionClass);
           optionIcon.classList.toggle(option.reverseDirectionClass);
         }
 
         document.querySelectorAll('.sort-option').forEach((_option) => {
-          _option.classList.remove('selected-option');
+          _option.classList.remove('active-sort-option');
         });
 
-        optionBlock.classList.add('selected-option');
+        optionBlock.classList.add('active-sort-option');
       });
 
       sortingSettingsBlock.append(optionBlock);
@@ -142,6 +142,7 @@ class DisplaySettings extends Component {
       'Году&nbsp;покупки:',
       'year'
     );
+    const resetButton = this.renderFilterResetButton();
 
     this.container.prepend(searchModule);
 
@@ -152,7 +153,8 @@ class DisplaySettings extends Component {
       filterBySizeModule,
       filterByFavouriteModule,
       filterByCountModule,
-      filterByYearModule
+      filterByYearModule,
+      resetButton
     );
   }
 
@@ -182,7 +184,6 @@ class DisplaySettings extends Component {
       optionBlock.setAttribute('data-filter-name', shape.name);
 
       optionBlock.addEventListener('click', () => {
-        optionBlock.classList.toggle('shape-filter-option_active');
         optionBlock.classList.toggle('active-filter-option');
       });
 
@@ -229,7 +230,6 @@ class DisplaySettings extends Component {
       optionBlock.setAttribute('data-filter-name', size);
 
       optionBlock.addEventListener('click', () => {
-        optionBlock.classList.toggle('selected-option');
         optionBlock.classList.toggle('active-filter-option');
       });
 
@@ -248,7 +248,7 @@ class DisplaySettings extends Component {
     optionBlock.innerHTML = '<i class="fa-light fa-check"></i>';
 
     optionBlock.addEventListener('click', () => {
-      optionBlock.classList.toggle('selected-option');
+      optionBlock.classList.toggle('active-favourite-option');
     });
 
     filterByFavouriteModule.append(optionBlock);
@@ -263,10 +263,10 @@ class DisplaySettings extends Component {
     const optionHTML = this.renderModule('range-filter-block', moduleName);
 
     const minValue = document.createElement('div');
-    minValue.className = 'range-filter-value';
+    minValue.className = 'range-filter-value button';
 
     const maxValue = document.createElement('div');
-    maxValue.className = 'range-filter-value';
+    maxValue.className = 'range-filter-value button';
 
     const optionBlock: noUiSliderTarget = document.createElement('div');
     optionBlock.className = 'range-slider-container';
@@ -329,6 +329,14 @@ class DisplaySettings extends Component {
     searchModule.append(searchFieldContainer);
     searchField.focus();
     return searchModule;
+  }
+
+  private renderFilterResetButton() {
+    const resetButton = document.createElement('div');
+    resetButton.className = 'reset-button button';
+    resetButton.textContent = 'Сбросить фильтры';
+
+    return resetButton;
   }
 }
 

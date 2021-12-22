@@ -202,7 +202,8 @@ body {
 .size-filter-option,
 .favourite-filter-option,
 .range-filter-value,
-.search-field-container {
+.search-field-container,
+.reset-button {
   width: 35%;
   padding: 8px;
   display: flex;
@@ -220,8 +221,10 @@ body {
   pointer-events: none;
 }
 
-.selected-option,
-.selected-toy {
+.active-filter-option,
+.active-favourite-option,
+.selected-toy,
+.sort-option.active-sort-option {
   border: 2px dotted var(--neon-green-color);
 }
 
@@ -239,6 +242,7 @@ body {
 .shape-filter-option {
   width: 13%;
   height: fit-content;
+  border: 2px solid transparent;
   filter: invert(30%);
 }
 
@@ -247,12 +251,12 @@ body {
     brightness(123%) contrast(129%);
 }
 
-.shape-filter-option_active:hover {
+.shape-filter-option.active-filter-option:hover {
   filter: invert(29%) sepia(96%) saturate(1324%) hue-rotate(96deg)
     brightness(88%) contrast(107%) !important;
 }
 
-.shape-filter-option_active {
+.shape-filter-option.active-filter-option {
   filter: invert(29%) sepia(96%) saturate(1324%) hue-rotate(96deg)
     brightness(88%) contrast(107%);
 }
@@ -300,6 +304,8 @@ body {
   border-radius: inherit;
   border: 1px dotted var(--main-font-color);
   font-size: inherit;
+  font-family: sans-serif;
+  font-style: italic;
   background-color: transparent;
   color: white;
   caret-color: white;
@@ -316,6 +322,8 @@ body {
 }
 
 .search-field::placeholder {
+  font-family: sunday;
+  font-style: initial;
   text-shadow: none;
 }
 
@@ -445,4 +453,9 @@ body {
 
 .range-filter-value {
   width: 10%;
+  cursor: default;
+}
+
+.reset-button {
+  width: 100%;
 }

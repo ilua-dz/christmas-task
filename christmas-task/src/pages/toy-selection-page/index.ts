@@ -33,6 +33,7 @@ class ToysPage extends Page {
     this.enableFilteringByRange('count');
     this.enableFilteringByRange('year');
     this.enableSearch();
+    this.enableFiltersReset();
     return this.container;
   }
 
@@ -89,6 +90,29 @@ class ToysPage extends Page {
     searchResetButton?.addEventListener('click', () =>
       this.toysBlock.searchCards(searchField.value)
     );
+  }
+
+  private enableFiltersReset() {
+    const resetButton = this.container.querySelector('.reset-button');
+    resetButton?.addEventListener('click', () => {
+      this.toysBlock.resetFilters();
+      this.container
+        .querySelectorAll('.active-filter-option')
+        .forEach((option: HTMLElement) => {
+          option.classList.remove('active-filter-option');
+        });
+      this.container
+        .querySelector('.active-favourite-option')
+        ?.classList.remove('active-favourite-option');
+      (
+        this.container.querySelector('.search-reset-button') as HTMLElement
+      ).click();
+      this.container
+        .querySelectorAll('.noUi-target')
+        .forEach((slider: noUiSliderTarget) => {
+          slider.noUiSlider?.reset();
+        });
+    });
   }
 }
 
