@@ -32,6 +32,7 @@ class ToysPage extends Page {
     this.enableFilteringByValues();
     this.enableFilteringByRange('count');
     this.enableFilteringByRange('year');
+    this.enableSearch();
     return this.container;
   }
 
@@ -60,7 +61,7 @@ class ToysPage extends Page {
 
   private enableFilteringByValues() {
     HTMLElements.filterOptionBtns(this.container)?.forEach((btn) =>
-      btn.addEventListener('click', () => this.toysBlock.filterCards())
+      btn.addEventListener('click', () => this.toysBlock.filterCardsByValue())
     );
   }
 
@@ -73,6 +74,21 @@ class ToysPage extends Page {
       const values = inputSlider.noUiSlider?.get() as number[];
       this.toysBlock.filterCardsByRange(propertyName, values);
     });
+  }
+
+  private enableSearch() {
+    const searchField = this.container.querySelector(
+      '.search-field'
+    ) as HTMLInputElement;
+    const searchResetButton = this.container.querySelector(
+      '.search-reset-button'
+    );
+    searchField.addEventListener('keyup', () =>
+      this.toysBlock.searchCards(searchField.value)
+    );
+    searchResetButton?.addEventListener('click', () =>
+      this.toysBlock.searchCards(searchField.value)
+    );
   }
 }
 

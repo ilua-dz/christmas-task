@@ -129,6 +129,7 @@ class DisplaySettings extends Component {
     const blockTitle = document.createElement('h4');
     blockTitle.textContent = 'Фильтровать по:';
 
+    const searchModule = this.renderSearchModule();
     const filterByShapeModule = this.renderFilterByShapeOptions();
     const filterByColorModule = this.renderFilterByColorOptions();
     const filterBySizeModule = this.renderFilterBySizeOptions();
@@ -141,6 +142,8 @@ class DisplaySettings extends Component {
       'Году&nbsp;покупки:',
       'year'
     );
+
+    this.container.prepend(searchModule);
 
     this.container.append(
       blockTitle,
@@ -292,6 +295,49 @@ class DisplaySettings extends Component {
     optionHTML.append(minValue, optionBlock, maxValue);
     return optionHTML;
   }
+
+  private renderSearchModule() {
+    const searchModule = this.renderModule('search-module', 'Поиск: ');
+    const searchFieldContainer = document.createElement('div');
+    searchFieldContainer.className = 'search-field-container';
+
+    const searchField = document.createElement('input');
+    searchField.type = 'text';
+    searchField.className = 'search-field button';
+    searchField.autofocus = true;
+    searchField.autocomplete = 'off';
+    searchField.placeholder = 'Введите название игрушки';
+
+    const searchButton = document.createElement('i');
+    searchButton.className = 'fa-light fa-magnifying-glass search-button';
+
+    const searchResetButton = document.createElement('i');
+    searchResetButton.className = 'fa-light fa-xmark search-reset-button';
+
+    searchField.addEventListener('keyup', () =>
+      displaySearchResetButton(searchField, searchResetButton)
+    );
+    searchResetButton.addEventListener('click', () => {
+      searchField.value = '';
+      displaySearchResetButton(searchField, searchResetButton);
+    });
+
+    searchFieldContainer.append(searchField, searchButton, searchResetButton);
+
+    setTimeout(() => searchField.focus(), 200);
+
+    searchModule.append(searchFieldContainer);
+    searchField.focus();
+    return searchModule;
+  }
 }
+
+const displaySearchResetButton = (
+  searchField: HTMLInputElement,
+  searchResetButton: HTMLElement
+) => {
+  if (searchField.value) searchResetButton.style.opacity = '1';
+  else searchResetButton.style.opacity = '0';
+};
 
 export default DisplaySettings;

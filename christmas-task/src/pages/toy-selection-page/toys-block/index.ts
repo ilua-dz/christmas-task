@@ -133,12 +133,12 @@ class ToysBlock extends Component {
           `data-${propertyName}`
         ) as string);
         if (propertyValue >= values[0] && propertyValue <= values[1])
-          card.style.display = '';
-        else card.style.display = 'none';
+          card.classList.remove(`filtered-by-${propertyName}-range`);
+        else card.classList.add(`filtered-by-${propertyName}-range`);
       });
   }
 
-  filterCards() {
+  filterCardsByValue() {
     this.displayFavouriteOnly = document
       .querySelector('.favourite-filter-option')
       ?.classList.contains('selected-option') as boolean;
@@ -147,6 +147,17 @@ class ToysBlock extends Component {
     else this.unfilter();
 
     this.displayFilterError();
+  }
+
+  searchCards(searchString: string) {
+    this.container
+      .querySelectorAll('.toy-card')
+      .forEach((card: HTMLElement) => {
+        const toyName = card.getAttribute('data-name');
+        if (!toyName?.includes(searchString))
+          card.classList.add('filtered-by-search');
+        else card.classList.remove('filtered-by-search');
+      });
   }
 }
 

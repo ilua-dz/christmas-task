@@ -18,7 +18,10 @@
   --button-color: rgba(190, 213, 213, 0.3);
 }
 
-.display-0 {
+.display-0,
+.filtered-by-count-range,
+.filtered-by-year-range,
+.filtered-by-search {
   display: none !important;
 }
 
@@ -198,7 +201,8 @@ body {
 .sort-option,
 .size-filter-option,
 .favourite-filter-option,
-.range-filter-value {
+.range-filter-value,
+.search-field-container {
   width: 35%;
   padding: 8px;
   display: flex;
@@ -224,7 +228,8 @@ body {
 .filter-by-shape-block,
 .filter-by-color-block,
 .filter-by-size-block,
-.filter-by-favourite-block {
+.filter-by-favourite-block,
+.search-module {
   margin-bottom: 1vw;
   display: flex;
   justify-content: space-between;
@@ -279,6 +284,58 @@ body {
   width: 60%;
   margin: 0 auto;
   margin-top: 1%;
+}
+
+.search-field-container {
+  position: relative;
+  width: 100%;
+  margin: 1% 0 0 7%;
+  padding: 0.5vmin 1vmin;
+}
+
+.search-field {
+  margin: 0;
+  padding: 1% 17% 1% 2%;
+  width: 100%;
+  border-radius: inherit;
+  border: 1px dotted var(--main-font-color);
+  font-size: inherit;
+  background-color: transparent;
+  color: white;
+  caret-color: white;
+  text-shadow: 0px 0px 6px rgba(255, 255, 255, 0.7);
+  transition: all 0.3s;
+}
+
+.search-field:focus {
+  outline: 0;
+  color: var(--neon-green-color);
+  border-color: var(--neon-green-color);
+  background-color: transparent;
+  text-shadow: none;
+}
+
+.search-field::placeholder {
+  text-shadow: none;
+}
+
+.search-button,
+.search-reset-button {
+  padding: 1%;
+  position: absolute;
+  color: var(--hl-text-color);
+  cursor: pointer;
+}
+
+.search-button {
+  right: 5%;
+}
+
+.search-reset-button {
+  right: 12%;
+  opacity: 0;
+  color: var(--neon-red-color);
+  transition: all 0.5s ease-in-out;
 }
 
 .toys-block {

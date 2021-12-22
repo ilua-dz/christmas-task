@@ -3,7 +3,7 @@ import data from '../../../libs/data';
 import { IToyDescription } from '../../../libs/data';
 
 const toyProperties = [
-  //   { name: 'name', title: '' },
+  { name: 'name', title: '' },
   { name: 'count', title: 'Количество' },
   { name: 'year', title: 'Год покупки' },
   { name: 'shape', title: 'Форма' },
@@ -31,34 +31,36 @@ class ToyCard extends Component {
 
     const toyDescriptionHTML = document.createElement('div');
     toyDescriptionHTML.className = 'toy-description';
-    toyProperties.forEach((property: { name: string; title: string }) => {
-      if (property.name === 'favorite') {
-        if (this.toyDescriptionObject[property.name]) {
-          this.container.setAttribute('data-favorite', '1');
+    toyProperties.forEach(
+      (property: { name: string; title: string }, propNumber) => {
+        if (property.name === 'favorite') {
+          if (this.toyDescriptionObject[property.name]) {
+            this.container.setAttribute('data-favorite', '1');
+          }
+        } else {
+          this.container.setAttribute(
+            `data-${property.name}`,
+            `${this.toyDescriptionObject[property.name]}`.toLocaleLowerCase()
+          );
         }
-      } else {
-        this.container.setAttribute(
-          `data-${property.name}`,
-          `${this.toyDescriptionObject[property.name]}`
-        );
+
+        const propertyHTML = document.createElement('p');
+
+        let propertyValue = this.toyDescriptionObject[property.name];
+        if (typeof propertyValue === 'boolean') {
+          propertyValue = propertyValue ? 'Да' : 'Нет';
+        }
+
+        const propertyValueHTML = document.createElement('span');
+        propertyValueHTML.className = 'toy-property-value';
+        propertyValueHTML.textContent = propertyValue;
+
+        propertyHTML.textContent = `${property.title}: `;
+        propertyHTML.append(propertyValueHTML);
+
+        if (propNumber > 0) toyDescriptionHTML.append(propertyHTML);
       }
-
-      const propertyHTML = document.createElement('p');
-
-      let propertyValue = this.toyDescriptionObject[property.name];
-      if (typeof propertyValue === 'boolean') {
-        propertyValue = propertyValue ? 'Да' : 'Нет';
-      }
-
-      const propertyValueHTML = document.createElement('span');
-      propertyValueHTML.className = 'toy-property-value';
-      propertyValueHTML.textContent = propertyValue;
-
-      propertyHTML.textContent = `${property.title}: `;
-      propertyHTML.append(propertyValueHTML);
-
-      toyDescriptionHTML.append(propertyHTML);
-    });
+    );
 
     const toyImage = document.createElement('img');
     toyImage.className = 'toy-image';
