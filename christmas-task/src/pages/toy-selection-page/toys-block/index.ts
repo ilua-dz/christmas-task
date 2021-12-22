@@ -82,7 +82,13 @@ class ToysBlock extends Component {
     this.container
       .querySelectorAll('.toy-card')
       .forEach((card: HTMLElement, index) => {
-        card.style.order = `${this.toySet.indexOf(data[index])}`;
+        card.style.opacity = '0';
+        setTimeout(() => {
+          card.style.order = `${this.toySet.indexOf(data[index])}`;
+        }, 150);
+        setTimeout(() => {
+          card.style.opacity = '1';
+        }, 300);
       });
   }
 
@@ -125,8 +131,8 @@ class ToysBlock extends Component {
 
     if (filteredToyCardCount >= 60) {
       const message = document.createElement('h2');
-      message.textContent = 'По введенным параметрам игрушки не найдены.';
-      this.container.append(message);
+      message.textContent = 'Совпадений не найдено';
+      if (!this.container.querySelector('h2')) this.container.append(message);
     } else this.container.querySelector('h2')?.remove();
   }
 

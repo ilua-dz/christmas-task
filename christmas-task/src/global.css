@@ -26,7 +26,16 @@
 }
 
 ::-webkit-scrollbar {
-  width: 0;
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--main-font-color);
+  border-radius: 10px;
 }
 
 a {
@@ -294,7 +303,6 @@ body {
   position: relative;
   width: 100%;
   margin: 1% 0 0 7%;
-  padding: 0.5vmin 1vmin;
 }
 
 .search-field {
@@ -351,6 +359,7 @@ body {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-evenly;
+  transition: all 1s ease-in-out;
 }
 
 .toy-card {
@@ -361,6 +370,7 @@ body {
   display: flex;
   justify-content: space-evenly;
   flex-wrap: wrap;
+  transition: all 0.15s ease-in-out;
 }
 
 .toy-card-title {
@@ -426,7 +436,6 @@ body {
 
 .noUi-target {
   height: 1vh;
-  padding-right: 4%;
   background: var(--button-color);
   border: none;
   box-shadow: none;
@@ -438,6 +447,8 @@ body {
 }
 
 .noUi-horizontal .noUi-handle {
+  top: -0.5vh;
+  right: -1vh;
   height: 2vh;
   width: 2vh;
   border-radius: 50%;
