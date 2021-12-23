@@ -4,6 +4,7 @@ import DisplaySettings from './display-settings-block';
 import ToysBlock from './toys-block';
 
 import { target as noUiSliderTarget } from 'nouislider';
+import { defaultDisplayToysSettings } from './toys-block';
 
 class ToysPage extends Page {
   private displaySettings: DisplaySettings;
@@ -28,6 +29,7 @@ class ToysPage extends Page {
       this.toysBlock.render()
     );
 
+    this.restoreRangeSliders();
     this.declareButtons();
 
     this.enableSorting();
@@ -40,7 +42,6 @@ class ToysPage extends Page {
 
     this.restoreSorting();
     this.restoreFilters();
-    this.restoreRangeSliders();
 
     return this.container;
   }
@@ -144,8 +145,6 @@ class ToysPage extends Page {
     console.log(countValues, dateValues);
     (inputSliders[0] as noUiSliderTarget).noUiSlider?.set(countValues);
     (inputSliders[1] as noUiSliderTarget).noUiSlider?.set(dateValues);
-
-    console.log((inputSliders[1] as noUiSliderTarget).noUiSlider?.get());
   }
 
   private enableSearch() {
@@ -183,6 +182,7 @@ class ToysPage extends Page {
         .forEach((slider: noUiSliderTarget) => {
           slider.noUiSlider?.reset();
         });
+      this.toysBlock.displaySettingsKeys = defaultDisplayToysSettings;
     });
   }
 
