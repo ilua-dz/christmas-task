@@ -190,9 +190,10 @@ class ToysPage extends Page {
   private enableSelectionReset() {
     const resetButton = this.container.querySelector('.reset-selection-button');
 
-    resetButton?.addEventListener('click', () =>
-      this.toysBlock.resetToysSelection()
-    );
+    resetButton?.addEventListener('click', () => {
+      this.toysBlock.resetToysSelection();
+      localStorage.clear();
+    });
   }
 
   private enableSaveDisplayToysSettings() {
