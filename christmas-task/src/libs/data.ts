@@ -10,7 +10,9 @@ export interface IToyDescription {
   favorite: boolean;
 }
 
-export const getMinMaxToyPropertyValue = (property: string) => {
+export const getMinMaxToyPropertyValue = (
+  property: string
+): [number, number] => {
   const numbers = data.map((toy) => +toy[property]).sort((a, b) => a - b);
   return [numbers[0], numbers[numbers.length - 1]];
 };

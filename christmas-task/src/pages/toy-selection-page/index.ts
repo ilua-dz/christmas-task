@@ -18,22 +18,20 @@ class ToysPage extends Page {
     this.displaySettings.renderSortingModule();
     this.displaySettings.renderFiltersModule();
 
-    const array = [];
-    for (let i = 1; i < 61; i++) {
-      array.push(i);
-    }
-    this.toysBlock.renderCards(...array);
+    this.toysBlock.renderCards();
 
     this.container.append(
       this.displaySettings.render(),
       this.toysBlock.render()
     );
+
     this.enableSorting();
     this.enableFilteringByValues();
     this.enableFilteringByRange('count');
     this.enableFilteringByRange('year');
     this.enableSearch();
     this.enableFiltersReset();
+    this.enableSaveDisplayToysSettings();
     return this.container;
   }
 
@@ -113,6 +111,21 @@ class ToysPage extends Page {
           slider.noUiSlider?.reset();
         });
     });
+  }
+
+  private enableSaveDisplayToysSettings() {
+    const saveDisplayToysSettings = () => {
+      localStorage.setItem(
+        'displayToysSettings',
+        JSON.stringify(this.toysBlock.displaySettingsKeys)
+      );
+      localStorage.setItem(
+        'selectedToysNumbers',
+        JSON.stringify(this.toysBlock.selectedToysNumbers)
+      );
+    };
+    window.addEventListener('hashchange', saveDisplayToysSettings);
+    window.addEventListener('beforeunload', saveDisplayToysSettings);
   }
 }
 

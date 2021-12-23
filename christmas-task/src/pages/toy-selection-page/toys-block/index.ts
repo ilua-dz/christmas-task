@@ -1,6 +1,9 @@
 import Component from '../../../core/templates/component';
 import ToyCard from './toy-card';
-import data, { IToyDescription } from '../../../libs/data';
+import data, {
+  IToyDescription,
+  getMinMaxToyPropertyValue,
+} from '../../../libs/data';
 import { sortToySet } from '../utils';
 import HTMLElements from '../../../core/utils/html-elements';
 
@@ -13,40 +16,98 @@ const getRepeatCategoryFiltersAmount = () => {
   return filterOptions.length - [...filterOptionsSet].length;
 };
 
+const toyProperties = ['shape', 'color', 'size'];
+interface IDisplaySettingsKeys {
+  sorting: { feature: string; direction: string };
+  filtersBy: {
+    [key: string]: string[] | number[];
+    count: [number, number];
+    year: [number, number];
+    shape: string[];
+    color: string[];
+    size: string[];
+  };
+  displayFavouriteOnly: boolean;
+}
+
 class ToysBlock extends Component {
   protected toySet: IToyDescription[];
   protected displayFavouriteOnly: boolean;
-  public selectedToys: IToyDescription[];
+  public selectedToysNumbers: number[];
+  public displaySettingsKeys: IDisplaySettingsKeys;
 
   constructor(tagName: string, className: string) {
     super(tagName, className + ' no-border');
     this.toySet = [];
     this.displayFavouriteOnly = false;
-    this.selectedToys = [];
+
+    this.restoreSettings();
+
+    window.addEventListener('keyup', (e) => {
+      if (e.code === 'KeyQ') {
+        console.log(this.displaySettingsKeys);
+        console.log(this.selectedToysNumbers);
+      }
+    });
+  }
+
+  private restoreSettings() {
+    this.displaySettingsKeys = !localStorage.getItem('displayToysSettings')
+      ? {
+          sorting: { feature: 'name', direction: 'fwd' },
+          filtersBy: {
+            count: getMinMaxToyPropertyValue('count'),
+            year: getMinMaxToyPropertyValue('year'),
+            shape: ['none'],
+            color: ['none'],
+            size: ['none'],
+          },
+          displayFavouriteOnly: false,
+        }
+      : JSON.parse(localStorage.getItem('displayToysSettings') as string);
+
+    this.selectedToysNumbers = !localStorage.getItem('selectedToysNumbers')
+      ? []
+      : JSON.parse(localStorage.getItem('selectedToysNumbers') as string);
+  }
+
+  private refreshSelectedToysIndicator() {
+    (
+      document.querySelector('.amount-selected-toys') as HTMLElement
+    ).textContent = this.selectedToysNumbers.length
+      ? ` ${this.selectedToysNumbers.length}`
+      : '';
+  }
+
+  private restoreSelectedCards() {
+    this.container
+      .querySelectorAll('.toy-card')
+      .forEach((toyCard: HTMLElement, number) => {
+        if (this.selectedToysNumbers.includes(number + 1))
+          toyCard.classList.add('selected-toy');
+      });
+    this.refreshSelectedToysIndicator();
   }
 
   enableChooseToy(
     toyCardHTML: HTMLElement,
     cardDescriptionObject: IToyDescription
   ) {
+    const cardNumber = +cardDescriptionObject.num;
     toyCardHTML.addEventListener('click', () => {
       if (!toyCardHTML.classList.contains('selected-toy')) {
-        if (this.selectedToys.length < 20) {
-          this.selectedToys.push(cardDescriptionObject);
+        if (this.selectedToysNumbers.length < 20) {
+          this.selectedToysNumbers.push(cardNumber);
           toyCardHTML.classList.add('selected-toy');
         } else this.renderChooseToyError();
       } else {
-        this.selectedToys.splice(
-          this.selectedToys.indexOf(cardDescriptionObject),
+        this.selectedToysNumbers.splice(
+          this.selectedToysNumbers.indexOf(cardNumber),
           1
         );
         toyCardHTML.classList.remove('selected-toy');
       }
-      (
-        document.querySelector('.amount-selected-toys') as HTMLElement
-      ).textContent = this.selectedToys.length
-        ? ` ${this.selectedToys.length}`
-        : '';
+      this.refreshSelectedToysIndicator();
     });
   }
 
@@ -66,8 +127,10 @@ class ToysBlock extends Component {
     }, 2500);
   }
 
-  renderCards(...cardNumbers: number[]) {
-    cardNumbers.forEach((n) => {
+  renderCards() {
+    const allToysNumbers = [...data].map((toy) => +toy.num);
+
+    allToysNumbers.forEach((n) => {
       const card = new ToyCard('div', 'button toy-card');
       card.renderCard(n);
       const cardHTML = card.render();
@@ -75,6 +138,7 @@ class ToysBlock extends Component {
       this.container.append(cardHTML);
       this.toySet.push(card.toyDescriptionObject);
     });
+    this.restoreSelectedCards();
   }
 
   sortCards(sortingFeature: string, direction: string) {
@@ -90,6 +154,38 @@ class ToysBlock extends Component {
           card.style.opacity = '1';
         }, 300);
       });
+    this.saveSortingMethod(sortingFeature, direction);
+  }
+
+  private saveSortingMethod(sortingFeature: string, direction: string) {
+    this.displaySettingsKeys.sorting.feature = sortingFeature;
+    this.displaySettingsKeys.sorting.direction = direction;
+  }
+
+  private saveFiltersByValueSettings() {
+    toyProperties.forEach((propertyName) => {
+      const savedFilterValues = this.displaySettingsKeys.filtersBy[
+        propertyName
+      ] as string[];
+      savedFilterValues.splice(0, savedFilterValues.length);
+      document
+        .querySelectorAll(`[data-filter-option="${propertyName}"]`)
+        .forEach((filter) => {
+          const filterValue = filter
+            .getAttribute('data-filter-name')
+            ?.toLowerCase() as string;
+
+          if (!savedFilterValues.includes(filterValue))
+            if (filter.classList.contains('active-filter-option')) {
+              savedFilterValues.push(filterValue);
+            }
+        });
+    });
+    this.displaySettingsKeys.displayFavouriteOnly = this.displayFavouriteOnly;
+  }
+
+  private saveFilterByRangeSettings(propertyName: string, values: number[]) {
+    this.displaySettingsKeys.filtersBy[propertyName] = values;
   }
 
   private applyFilters() {
@@ -98,11 +194,13 @@ class ToysBlock extends Component {
 
       let checkedFiltersCount = getRepeatCategoryFiltersAmount();
       HTMLElements.activeFilters().forEach((filter) => {
-        if (
-          card.getAttribute(
-            `data-${filter.getAttribute('data-filter-option') as string}`
-          ) === filter.getAttribute('data-filter-name')?.toLowerCase()
-        )
+        const filterAttribute: string = filter.getAttribute(
+          'data-filter-option'
+        ) as string;
+        const filterValue: string = filter
+          .getAttribute('data-filter-name')
+          ?.toLowerCase() as string;
+        if (card.getAttribute(`data-${filterAttribute}`) === filterValue)
           checkedFiltersCount++;
       });
       if (checkedFiltersCount === HTMLElements.activeFilters().length)
@@ -147,6 +245,10 @@ class ToysBlock extends Component {
           card.classList.remove(`filtered-by-${propertyName}-range`);
         else card.classList.add(`filtered-by-${propertyName}-range`);
       });
+
+    this.displayFilterError();
+
+    this.saveFilterByRangeSettings(propertyName, values);
   }
 
   filterCardsByValue() {
@@ -158,6 +260,8 @@ class ToysBlock extends Component {
     else this.unfilter();
 
     this.displayFilterError();
+
+    this.saveFiltersByValueSettings();
   }
 
   searchCards(searchString: string) {
