@@ -9,6 +9,9 @@ const HTMLElements = {
     container.querySelectorAll('.filter-option'),
 
   activeFilters: () => document.querySelectorAll('.active-filter-option'),
+
+  favouriteOnlyBtn: (container: HTMLElement) =>
+    container.querySelector('.favourite-filter-option'),
 };
 
 export default HTMLElements;

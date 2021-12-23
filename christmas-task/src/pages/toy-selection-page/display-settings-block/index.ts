@@ -4,6 +4,11 @@ import { getMinMaxToyPropertyValue } from '../../../libs/data';
 import noUiSlider from 'nouislider';
 import { target as noUiSliderTarget } from 'nouislider';
 
+import {
+  IDisplaySettingsKeys,
+  defaultDisplayToysSettings,
+} from '../toys-block';
+
 const sortingOptions = [
   {
     name: 'По имени',
@@ -75,8 +80,17 @@ const toggleId = (block: HTMLElement, firstId: string, secondId: string) => {
 };
 
 class DisplaySettings extends Component {
+  private displaySettings: IDisplaySettingsKeys;
   constructor(tagName: string, className: string) {
     super(tagName, className);
+
+    this.restoreSettings();
+  }
+
+  private restoreSettings() {
+    this.displaySettings = !localStorage.getItem('displayToysSettings')
+      ? defaultDisplayToysSettings
+      : JSON.parse(localStorage.getItem('displayToysSettings') as string);
   }
 
   renderSortingModule() {

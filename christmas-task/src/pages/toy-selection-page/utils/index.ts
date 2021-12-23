@@ -10,7 +10,7 @@ export const sortToySet = (
     case 'name':
       result.sort((a, b) => a.name.localeCompare(b.name));
       break;
-    case 'year':
+    case 'date':
       result.sort((a, b) => +a.year - +b.year);
       break;
     default:
@@ -18,21 +18,5 @@ export const sortToySet = (
   }
 
   if (direction === 'reverse') result.reverse();
-  return result;
-};
-
-export const filterToySet = (
-  toySet: IToyDescription[],
-  filter: string
-): IToyDescription[] => {
-  let result = [...toySet];
-  switch (filter) {
-    case 'ball':
-      result = result.filter((toy) => toy.shape === 'шар');
-      break;
-    case 'bell':
-      result = result.filter((toy) => toy.shape === 'колокольчик');
-      break;
-  }
   return result;
 };

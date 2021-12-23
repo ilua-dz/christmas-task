@@ -8,6 +8,9 @@ import { target as noUiSliderTarget } from 'nouislider';
 class ToysPage extends Page {
   private displaySettings: DisplaySettings;
   private toysBlock: ToysBlock;
+  private sortByNameBtn: HTMLElement;
+  private sortByDateBtn: HTMLElement;
+  private favouriteOnlyBtn: HTMLElement;
   constructor(id: string) {
     super(id);
     this.displaySettings = new DisplaySettings('div', 'filter-settings');
@@ -25,6 +28,8 @@ class ToysPage extends Page {
       this.toysBlock.render()
     );
 
+    this.declareButtons();
+
     this.enableSorting();
     this.enableFilteringByValues();
     this.enableFilteringByRange('count');
@@ -32,36 +37,91 @@ class ToysPage extends Page {
     this.enableSearch();
     this.enableFiltersReset();
     this.enableSaveDisplayToysSettings();
+
+    this.restoreSorting();
+    this.restoreFilters();
+    this.restoreRangeSliders();
+
     return this.container;
   }
 
+  private declareButtons() {
+    this.sortByNameBtn = HTMLElements.sortByNameBtn(
+      this.container
+    ) as HTMLElement;
+
+    this.sortByDateBtn = HTMLElements.sortByDateBtn(
+      this.container
+    ) as HTMLElement;
+
+    this.favouriteOnlyBtn = HTMLElements.favouriteOnlyBtn(
+      this.container
+    ) as HTMLElement;
+  }
+
+  private sortCards(feature: string, e: Event) {
+    const target = e.target as HTMLElement;
+    if (target.id === `sort-by-${feature}`)
+      this.toysBlock.sortCards(feature, 'fwd');
+    else if (target.id === `sort-by-${feature}-reverse`)
+      this.toysBlock.sortCards(feature, 'reverse');
+  }
+
   private enableSorting() {
-    HTMLElements.sortByNameBtn(this.container)?.addEventListener(
-      'click',
-      (e) => {
-        const target = e.target as HTMLElement;
-        if (target.id === 'sort-by-name')
-          this.toysBlock.sortCards('name', 'fwd');
-        else if (target.id === 'sort-by-name-reverse')
-          this.toysBlock.sortCards('name', 'reverse');
-      }
+    this.sortByNameBtn.addEventListener('click', (e) =>
+      this.sortCards('name', e)
     );
-    HTMLElements.sortByDateBtn(this.container)?.addEventListener(
-      'click',
-      (e) => {
-        const target = e.target as HTMLElement;
-        if (target.id === 'sort-by-date')
-          this.toysBlock.sortCards('year', 'fwd');
-        else if (target.id === 'sort-by-date-reverse')
-          this.toysBlock.sortCards('year', 'reverse');
-      }
+    this.sortByDateBtn.addEventListener('click', (e) =>
+      this.sortCards('date', e)
     );
+  }
+
+  private restoreSorting() {
+    const sortMethod = this.toysBlock.displaySettingsKeys.sorting;
+    switch (sortMethod.feature) {
+      case 'name':
+        this.sortByNameBtn.click();
+        if (sortMethod.direction === 'reverse') this.sortByNameBtn.click();
+        break;
+      case 'date':
+        this.sortByDateBtn.click();
+        if (sortMethod.direction === 'reverse') this.sortByDateBtn.click();
+        break;
+      default:
+        break;
+    }
   }
 
   private enableFilteringByValues() {
     HTMLElements.filterOptionBtns(this.container)?.forEach((btn) =>
       btn.addEventListener('click', () => this.toysBlock.filterCardsByValue())
     );
+  }
+
+  private restoreFilters() {
+    const savedFilters = this.toysBlock.displaySettingsKeys.filtersBy;
+
+    for (const key in savedFilters) {
+      savedFilters[key].forEach((filterOption) => {
+        HTMLElements.filterOptionBtns(this.container)?.forEach(
+          (btn: HTMLElement) => {
+            if (
+              btn.getAttribute('data-filter-option') === key &&
+              (btn
+                .getAttribute('data-filter-name')
+                ?.toLowerCase() as string) === filterOption
+            ) {
+              setTimeout(() => {
+                btn.click();
+              }, 100);
+            }
+          }
+        );
+      });
+    }
+
+    if (this.toysBlock.displaySettingsKeys.displayFavouriteOnly)
+      this.favouriteOnlyBtn.click();
   }
 
   private enableFilteringByRange(propertyName: string) {
@@ -73,6 +133,19 @@ class ToysPage extends Page {
       const values = inputSlider.noUiSlider?.get() as number[];
       this.toysBlock.filterCardsByRange(propertyName, values);
     });
+  }
+
+  private restoreRangeSliders() {
+    const inputSliders = this.container.querySelectorAll(
+      '.range-slider-container'
+    );
+    const countValues = [...this.toysBlock.displaySettingsKeys.filtersBy.count];
+    const dateValues = [...this.toysBlock.displaySettingsKeys.filtersBy.year];
+    console.log(countValues, dateValues);
+    (inputSliders[0] as noUiSliderTarget).noUiSlider?.set(countValues);
+    (inputSliders[1] as noUiSliderTarget).noUiSlider?.set(dateValues);
+
+    console.log((inputSliders[1] as noUiSliderTarget).noUiSlider?.get());
   }
 
   private enableSearch() {

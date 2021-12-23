@@ -17,7 +17,7 @@ const getRepeatCategoryFiltersAmount = () => {
 };
 
 const toyProperties = ['shape', 'color', 'size'];
-interface IDisplaySettingsKeys {
+export interface IDisplaySettingsKeys {
   sorting: { feature: string; direction: string };
   filtersBy: {
     [key: string]: string[] | number[];
@@ -29,6 +29,18 @@ interface IDisplaySettingsKeys {
   };
   displayFavouriteOnly: boolean;
 }
+
+export const defaultDisplayToysSettings = {
+  sorting: { feature: 'name', direction: 'fwd' },
+  filtersBy: {
+    count: getMinMaxToyPropertyValue('count'),
+    year: getMinMaxToyPropertyValue('year'),
+    shape: ['none'],
+    color: ['none'],
+    size: ['none'],
+  },
+  displayFavouriteOnly: false,
+};
 
 class ToysBlock extends Component {
   protected toySet: IToyDescription[];
@@ -53,17 +65,7 @@ class ToysBlock extends Component {
 
   private restoreSettings() {
     this.displaySettingsKeys = !localStorage.getItem('displayToysSettings')
-      ? {
-          sorting: { feature: 'name', direction: 'fwd' },
-          filtersBy: {
-            count: getMinMaxToyPropertyValue('count'),
-            year: getMinMaxToyPropertyValue('year'),
-            shape: ['none'],
-            color: ['none'],
-            size: ['none'],
-          },
-          displayFavouriteOnly: false,
-        }
+      ? defaultDisplayToysSettings
       : JSON.parse(localStorage.getItem('displayToysSettings') as string);
 
     this.selectedToysNumbers = !localStorage.getItem('selectedToysNumbers')
