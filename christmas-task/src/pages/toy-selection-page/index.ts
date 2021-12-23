@@ -38,6 +38,7 @@ class ToysPage extends Page {
     this.enableFilteringByRange('year');
     this.enableSearch();
     this.enableFiltersReset();
+    this.enableSelectionReset();
     this.enableSaveDisplayToysSettings();
 
     this.restoreSorting();
@@ -163,7 +164,7 @@ class ToysPage extends Page {
   }
 
   private enableFiltersReset() {
-    const resetButton = this.container.querySelector('.reset-button');
+    const resetButton = this.container.querySelector('.reset-filters-button');
     resetButton?.addEventListener('click', () => {
       this.toysBlock.resetFilters();
       this.container
@@ -184,6 +185,14 @@ class ToysPage extends Page {
         });
       this.toysBlock.displaySettingsKeys = defaultDisplayToysSettings;
     });
+  }
+
+  private enableSelectionReset() {
+    const resetButton = this.container.querySelector('.reset-selection-button');
+
+    resetButton?.addEventListener('click', () =>
+      this.toysBlock.resetToysSelection()
+    );
   }
 
   private enableSaveDisplayToysSettings() {

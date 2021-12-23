@@ -91,6 +91,16 @@ class ToysBlock extends Component {
     this.refreshSelectedToysIndicator();
   }
 
+  resetToysSelection() {
+    this.selectedToysNumbers = [];
+    this.container
+      .querySelectorAll('.toy-card')
+      .forEach((toyCard: HTMLElement) =>
+        toyCard.classList.remove('selected-toy')
+      );
+    this.refreshSelectedToysIndicator();
+  }
+
   enableChooseToy(
     toyCardHTML: HTMLElement,
     cardDescriptionObject: IToyDescription

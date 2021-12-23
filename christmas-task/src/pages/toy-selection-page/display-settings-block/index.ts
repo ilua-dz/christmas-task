@@ -156,7 +156,8 @@ class DisplaySettings extends Component {
       'Году&nbsp;покупки:',
       'year'
     );
-    const resetButton = this.renderFilterResetButton();
+    const resetFiltersButton = this.renderFilterResetButton();
+    const resetSelectionButton = this.renderResetSelectionButton();
 
     this.container.prepend(searchModule);
 
@@ -168,7 +169,8 @@ class DisplaySettings extends Component {
       filterByFavouriteModule,
       filterByCountModule,
       filterByYearModule,
-      resetButton
+      resetFiltersButton,
+      resetSelectionButton
     );
   }
 
@@ -345,12 +347,23 @@ class DisplaySettings extends Component {
     return searchModule;
   }
 
-  private renderFilterResetButton() {
+  private renderResetButton(className: string, buttonDescription: string) {
     const resetButton = document.createElement('div');
-    resetButton.className = 'reset-button button';
-    resetButton.textContent = 'Сбросить фильтры';
+    resetButton.className = 'reset-button button ' + className;
+    resetButton.textContent = buttonDescription;
 
     return resetButton;
+  }
+
+  private renderFilterResetButton() {
+    return this.renderResetButton('reset-filters-button', 'Сбросить фильтры');
+  }
+
+  private renderResetSelectionButton() {
+    return this.renderResetButton(
+      'reset-selection-button',
+      'Сбросить избранные игрушки'
+    );
   }
 }
 
