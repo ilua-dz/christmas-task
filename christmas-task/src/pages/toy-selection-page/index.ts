@@ -30,6 +30,7 @@ class ToysPage extends Page {
     );
 
     this.restoreRangeSliders();
+
     this.declareButtons();
 
     this.enableSorting();
@@ -82,12 +83,12 @@ class ToysPage extends Page {
     const sortMethod = this.toysBlock.displaySettingsKeys.sorting;
     switch (sortMethod.feature) {
       case 'name':
-        this.sortByNameBtn.click();
         if (sortMethod.direction === 'reverse') this.sortByNameBtn.click();
+        this.sortByNameBtn.click();
         break;
       case 'date':
-        this.sortByDateBtn.click();
         if (sortMethod.direction === 'reverse') this.sortByDateBtn.click();
+        this.sortByDateBtn.click();
         break;
       default:
         break;
@@ -143,7 +144,7 @@ class ToysPage extends Page {
     );
     const countValues = [...this.toysBlock.displaySettingsKeys.filtersBy.count];
     const dateValues = [...this.toysBlock.displaySettingsKeys.filtersBy.year];
-    console.log(countValues, dateValues);
+
     (inputSliders[0] as noUiSliderTarget).noUiSlider?.set(countValues);
     (inputSliders[1] as noUiSliderTarget).noUiSlider?.set(dateValues);
   }

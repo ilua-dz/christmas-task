@@ -54,13 +54,6 @@ class ToysBlock extends Component {
     this.displayFavouriteOnly = false;
 
     this.restoreSettings();
-
-    window.addEventListener('keyup', (e) => {
-      if (e.code === 'KeyQ') {
-        console.log(this.displaySettingsKeys);
-        console.log(this.selectedToysNumbers);
-      }
-    });
   }
 
   private restoreSettings() {
