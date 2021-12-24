@@ -67,11 +67,15 @@ class ToysBlock extends Component {
   }
 
   private refreshSelectedToysIndicator() {
-    (
-      document.querySelector('.amount-selected-toys') as HTMLElement
-    ).textContent = this.selectedToysNumbers.length
-      ? ` ${this.selectedToysNumbers.length}`
-      : '';
+    setTimeout(() => {
+      document
+        .querySelectorAll('.amount-selected-toys')
+        .forEach((indicator) => {
+          indicator.textContent = this.selectedToysNumbers.length
+            ? ` ${this.selectedToysNumbers.length}`
+            : '';
+        });
+    }, 50);
   }
 
   private restoreSelectedCards() {

@@ -330,7 +330,7 @@ class DisplaySettings extends Component {
     const searchResetButton = document.createElement('i');
     searchResetButton.className = 'fa-light fa-xmark search-reset-button';
 
-    searchField.addEventListener('keyup', () =>
+    searchField.addEventListener('input', () =>
       displaySearchResetButton(searchField, searchResetButton)
     );
     searchResetButton.addEventListener('click', () => {
@@ -360,10 +360,13 @@ class DisplaySettings extends Component {
   }
 
   private renderResetSelectionButton() {
-    return this.renderResetButton(
+    const resetButton = this.renderResetButton(
       'reset-selection-button',
       'Сбросить избранные игрушки'
     );
+    resetButton.innerHTML +=
+      '<i class="fa-thin fa-ornament amount-selected-toys"></i>';
+    return resetButton;
   }
 }
 

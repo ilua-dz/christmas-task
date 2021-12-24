@@ -156,7 +156,7 @@ class ToysPage extends Page {
     const searchResetButton = this.container.querySelector(
       '.search-reset-button'
     );
-    searchField.addEventListener('keyup', () =>
+    searchField.addEventListener('input', () =>
       this.toysBlock.searchCards(searchField.value)
     );
     searchResetButton?.addEventListener('click', () =>
