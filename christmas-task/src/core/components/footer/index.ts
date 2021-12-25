@@ -27,8 +27,9 @@ class Footer extends Component {
     });
     const yearString = document.createElement('p');
     yearString.textContent = '2021';
-    yearString.className = 'year-string';
-    this.container.append(buttonsContainer, yearString);
+
+    buttonsContainer.insertBefore(yearString, buttonsContainer.lastChild);
+    this.container.append(buttonsContainer);
   }
 
   render() {

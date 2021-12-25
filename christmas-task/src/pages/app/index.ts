@@ -46,8 +46,12 @@ class App {
     }
   }
 
+  static getWindowHash() {
+    return window.location.hash.slice(1);
+  }
+
   private renderCurrentPage() {
-    const hash = window.location.hash.slice(1);
+    const hash = App.getWindowHash();
     if (hash) App.renderNewPage(hash);
     else App.renderNewPage(PageIds.startPage);
   }
@@ -62,10 +66,27 @@ class App {
     this.footer = new Footer('footer', 'footer');
   }
 
+  static enableHighlightNavButtons() {
+    const highlightButton = () => {
+      App.container
+        .querySelectorAll<HTMLElement>('.header-button')
+        .forEach((btn, btnNumber) => {
+          btn.classList.remove('selected-nav-button');
+          if (btn.getAttribute('data-link') === App.getWindowHash())
+            btn.classList.add('selected-nav-button');
+          if (!App.getWindowHash() && btnNumber === 0)
+            btn.classList.add('selected-nav-button');
+        });
+    };
+    highlightButton();
+    window.addEventListener('hashchange', highlightButton);
+  }
+
   run() {
     App.container.append(this.header.render());
     this.enableRouteChange();
     App.container.append(this.footer.render());
+    App.enableHighlightNavButtons();
   }
 }
 

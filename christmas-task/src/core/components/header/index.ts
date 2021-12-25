@@ -29,12 +29,14 @@ class Header extends Component {
     buttons.forEach((button) => {
       const buttonHTML = document.createElement('a');
       buttonHTML.classList.add('button', 'header-button');
+      buttonHTML.setAttribute('data-link', button.id);
       const buttonDescription = document.createElement('p');
       buttonDescription.classList.add('button__description');
       buttonDescription.textContent = button.text;
       buttonHTML.href = `#${button.id}`;
       buttonHTML.innerHTML = button.icon;
       buttonHTML.append(buttonDescription);
+
       buttonsContainer.append(buttonHTML);
     });
     this.container.append(buttonsContainer);
