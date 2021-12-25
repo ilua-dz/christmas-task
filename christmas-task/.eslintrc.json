@@ -25,6 +25,7 @@
   },
 
   "rules": {
+    "strict": 2,
     "prettier/prettier": "error",
     "@typescript-eslint/no-explicit-any": 2
   }

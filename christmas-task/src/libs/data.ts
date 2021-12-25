@@ -1,4 +1,4 @@
-export interface IToyDescription {
+export type toyDescriptionType = {
   [key: string]: string | boolean;
   num: string;
   name: string;
@@ -8,7 +8,7 @@ export interface IToyDescription {
   color: string;
   size: string;
   favorite: boolean;
-}
+};
 
 export const getMinMaxToyPropertyValue = (
   property: string
@@ -17,7 +17,7 @@ export const getMinMaxToyPropertyValue = (
   return [numbers[0], numbers[numbers.length - 1]];
 };
 
-const data: IToyDescription[] = [
+const data: toyDescriptionType[] = [
   {
     num: '1',
     name: 'Большой шар с рисунком',

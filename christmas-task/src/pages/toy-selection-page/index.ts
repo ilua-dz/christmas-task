@@ -9,9 +9,9 @@ import { defaultDisplayToysSettings } from './toys-block';
 class ToysPage extends Page {
   private displaySettings: DisplaySettings;
   private toysBlock: ToysBlock;
-  private sortByNameBtn: HTMLElement;
-  private sortByDateBtn: HTMLElement;
-  private favouriteOnlyBtn: HTMLElement;
+  private sortByNameBtn!: HTMLElement;
+  private sortByDateBtn!: HTMLElement;
+  private favouriteOnlyBtn!: HTMLElement;
   constructor(id: string) {
     super(id);
     this.displaySettings = new DisplaySettings('div', 'filter-settings');
@@ -106,20 +106,17 @@ class ToysPage extends Page {
 
     for (const key in savedFilters) {
       savedFilters[key].forEach((filterOption) => {
-        HTMLElements.filterOptionBtns(this.container)?.forEach(
-          (btn: HTMLElement) => {
-            if (
-              btn.getAttribute('data-filter-option') === key &&
-              (btn
-                .getAttribute('data-filter-name')
-                ?.toLowerCase() as string) === filterOption
-            ) {
-              setTimeout(() => {
-                btn.click();
-              }, 100);
-            }
+        HTMLElements.filterOptionBtns(this.container).forEach((btn) => {
+          if (
+            btn.getAttribute('data-filter-option') === key &&
+            (btn.getAttribute('data-filter-name')?.toLowerCase() as string) ===
+              filterOption
+          ) {
+            setTimeout(() => {
+              (btn as HTMLElement).click();
+            }, 100);
           }
-        );
+        });
       });
     }
 
@@ -170,7 +167,7 @@ class ToysPage extends Page {
       this.toysBlock.resetFilters();
       this.container
         .querySelectorAll('.active-filter-option')
-        .forEach((option: HTMLElement) => {
+        .forEach((option) => {
           option.classList.remove('active-filter-option');
         });
       this.container
@@ -180,7 +177,7 @@ class ToysPage extends Page {
         this.container.querySelector('.search-reset-button') as HTMLElement
       ).click();
       this.container
-        .querySelectorAll('.noUi-target')
+        .querySelectorAll<HTMLElement>('.noUi-target')
         .forEach((slider: noUiSliderTarget) => {
           slider.noUiSlider?.reset();
         });

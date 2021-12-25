@@ -1,10 +1,16 @@
-import { IToyDescription } from '../../../libs/data';
+import { toyDescriptionType } from '../../../libs/data';
 
-export const sortToySet = (
-  toySet: IToyDescription[],
+type sortToySetFunc<T> = (
+  toySet: T[],
   sortingFeature: string,
   direction: string
-): IToyDescription[] => {
+) => T[];
+
+export const sortToySet: sortToySetFunc<toyDescriptionType> = (
+  toySet,
+  sortingFeature,
+  direction
+) => {
   const result = [...toySet];
   switch (sortingFeature) {
     case 'name':

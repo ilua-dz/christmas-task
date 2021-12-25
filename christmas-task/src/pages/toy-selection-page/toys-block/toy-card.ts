@@ -1,6 +1,6 @@
 import Component from '../../../core/templates/component';
 import data from '../../../libs/data';
-import { IToyDescription } from '../../../libs/data';
+import { toyDescriptionType } from '../../../libs/data';
 
 const toyProperties = [
   { name: 'name', title: '' },
@@ -13,7 +13,7 @@ const toyProperties = [
 ];
 
 class ToyCard extends Component {
-  toyDescriptionObject: IToyDescription;
+  toyDescriptionObject!: toyDescriptionType;
 
   constructor(tagName: string, className: string) {
     super(tagName, className);

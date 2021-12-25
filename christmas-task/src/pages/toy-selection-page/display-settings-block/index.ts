@@ -74,13 +74,17 @@ const filterByColorOptions = [
 
 const filterBySizeOptions = ['большой', 'средний', 'малый'];
 
-const toggleId = (block: HTMLElement, firstId: string, secondId: string) => {
+const toggleId = (
+  block: HTMLElement,
+  firstId: string,
+  secondId: string
+): void => {
   if (block.id === firstId) block.id = secondId;
   else if (block.id === secondId) block.id = firstId;
 };
 
 class DisplaySettings extends Component {
-  private displaySettings: IDisplaySettingsKeys;
+  private displaySettings!: IDisplaySettingsKeys;
   constructor(tagName: string, className: string) {
     super(tagName, className);
 

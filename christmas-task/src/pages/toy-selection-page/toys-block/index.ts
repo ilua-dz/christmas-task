@@ -1,7 +1,7 @@
 import Component from '../../../core/templates/component';
 import ToyCard from './toy-card';
 import data, {
-  IToyDescription,
+  toyDescriptionType,
   getMinMaxToyPropertyValue,
 } from '../../../libs/data';
 import { sortToySet } from '../utils';
@@ -43,10 +43,10 @@ export const defaultDisplayToysSettings = {
 };
 
 class ToysBlock extends Component {
-  protected toySet: IToyDescription[];
+  protected toySet: toyDescriptionType[];
   protected displayFavouriteOnly: boolean;
-  public selectedToysNumbers: number[];
-  public displaySettingsKeys: IDisplaySettingsKeys;
+  public selectedToysNumbers!: number[];
+  public displaySettingsKeys!: IDisplaySettingsKeys;
 
   constructor(tagName: string, className: string) {
     super(tagName, className + ' no-border');
@@ -79,12 +79,10 @@ class ToysBlock extends Component {
   }
 
   private restoreSelectedCards() {
-    this.container
-      .querySelectorAll('.toy-card')
-      .forEach((toyCard: HTMLElement, number) => {
-        if (this.selectedToysNumbers.includes(number + 1))
-          toyCard.classList.add('selected-toy');
-      });
+    this.container.querySelectorAll('.toy-card').forEach((toyCard, number) => {
+      if (this.selectedToysNumbers.includes(number + 1))
+        toyCard.classList.add('selected-toy');
+    });
     this.refreshSelectedToysIndicator();
   }
 
@@ -92,15 +90,13 @@ class ToysBlock extends Component {
     this.selectedToysNumbers = [];
     this.container
       .querySelectorAll('.toy-card')
-      .forEach((toyCard: HTMLElement) =>
-        toyCard.classList.remove('selected-toy')
-      );
+      .forEach((toyCard) => toyCard.classList.remove('selected-toy'));
     this.refreshSelectedToysIndicator();
   }
 
   enableChooseToy(
     toyCardHTML: HTMLElement,
-    cardDescriptionObject: IToyDescription
+    cardDescriptionObject: toyDescriptionType
   ) {
     const cardNumber = +cardDescriptionObject.num;
     toyCardHTML.addEventListener('click', () => {
@@ -153,8 +149,8 @@ class ToysBlock extends Component {
   sortCards(sortingFeature: string, direction: string) {
     this.toySet = sortToySet(this.toySet, sortingFeature, direction);
     this.container
-      .querySelectorAll('.toy-card')
-      .forEach((card: HTMLElement, index) => {
+      .querySelectorAll<HTMLElement>('.toy-card')
+      .forEach((card, index) => {
         card.style.opacity = '0';
         setTimeout(() => {
           card.style.order = `${this.toySet.indexOf(data[index])}`;
@@ -231,9 +227,9 @@ class ToysBlock extends Component {
   }
 
   private displayFilterError() {
-    const cardArray = Array.from(this.container.childNodes);
+    const cardArray = Array.from(this.container.childNodes) as HTMLElement[];
     const filteredToyCardCount = cardArray
-      .map((card: HTMLElement) => getComputedStyle(card).display === 'none')
+      .map((card) => getComputedStyle(card).display === 'none')
       .reduce((sum, current) => +sum + +current, 0);
 
     if (filteredToyCardCount >= 60) {
@@ -245,8 +241,8 @@ class ToysBlock extends Component {
 
   filterCardsByRange(propertyName: string, values: number[]) {
     this.container
-      .querySelectorAll('.toy-card')
-      .forEach((card: HTMLElement) => {
+      .querySelectorAll<HTMLElement>('.toy-card')
+      .forEach((card) => {
         const propertyValue = +(card.getAttribute(
           `data-${propertyName}`
         ) as string);
@@ -275,8 +271,8 @@ class ToysBlock extends Component {
 
   searchCards(searchString: string) {
     this.container
-      .querySelectorAll('.toy-card')
-      .forEach((card: HTMLElement) => {
+      .querySelectorAll<HTMLElement>('.toy-card')
+      .forEach((card) => {
         const toyName = card.getAttribute('data-name');
         if (!toyName?.includes(searchString))
           card.classList.add('filtered-by-search');
@@ -287,8 +283,8 @@ class ToysBlock extends Component {
 
   resetFilters() {
     this.container
-      .querySelectorAll('.toy-card')
-      .forEach((card: HTMLElement) => {
+      .querySelectorAll<HTMLElement>('.toy-card')
+      .forEach((card) => {
         card.classList.remove(
           'display-0',
           'filtered-by-count-range',
