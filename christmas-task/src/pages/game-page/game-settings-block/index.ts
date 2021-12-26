@@ -21,10 +21,20 @@ export const renderGameSettingsBlock = (...elements: HTMLElement[]) => {
 const treeOptionsNumber = 4;
 const bgOptionsNumber = 8;
 
+const enableHighlightOption = (option: HTMLElement) => {
+  option.addEventListener('click', () => {
+    option.parentElement?.childNodes.forEach((_option) => {
+      (_option as HTMLElement).classList.remove('active-option');
+    });
+    option.classList.add('active-option');
+  });
+};
+
 export const getOptionsSet = (
   optionsNumber: number,
   imgPath: string,
-  optionClassName: string
+  optionClassName: string,
+  localStorageKey?: string
 ) => {
   const optionImgLinks = [];
   for (let i = 0; i < optionsNumber; i++) {
@@ -33,9 +43,15 @@ export const getOptionsSet = (
 
   const optionsSet: HTMLElement[] = [];
 
+  // if (localStorageKey && savedOption) {
+  //   const savedOption = localStorage.getItem(localStorageKey);
+  // }
+
   optionImgLinks.forEach((imgLink) => {
     const option = document.createElement('div');
     option.className = optionClassName + ' menu-option';
+    enableHighlightOption(option);
+
     const image = document.createElement('img');
     image.src = imgLink;
     option.append(image);

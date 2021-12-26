@@ -246,8 +246,9 @@ body {
 .active-filter-option,
 .active-favourite-option,
 .selected-toy,
-.sort-option.active-sort-option {
-  border: 2px dotted var(--neon-green-color);
+.sort-option.active-sort-option,
+.active-option {
+  border: 2px dotted var(--neon-green-color) !important;
 }
 
 .filter-by-shape-block,
@@ -737,12 +738,17 @@ body {
 }
 
 .tree-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   padding: 0;
   width: 50%;
 }
 
 .tree-bg {
-  display: block;
+  z-index: -1;
+  position: absolute;
   border-radius: inherit;
   height: 100%;
   width: 100%;
