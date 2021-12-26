@@ -234,7 +234,7 @@ class ToysBlock extends Component {
 
     if (filteredToyCardCount >= 60) {
       const message = document.createElement('h2');
-      message.className = 'button border-rounded';
+      message.className = 'error-message button border-rounded';
       message.textContent = 'Совпадений не найдено';
       if (!this.container.querySelector('h2')) this.container.append(message);
     } else this.container.querySelector('h2')?.remove();

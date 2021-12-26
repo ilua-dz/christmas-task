@@ -1,4 +1,3 @@
-import Page from '../../core/templates/page';
 import StartPage from '../start-page';
 import ToysPage from '../toy-selection-page';
 import GamePage from '../game-page';
@@ -13,35 +12,41 @@ export const enum PageIds {
   defaultPageID = 'current-page',
 }
 
+const validPageIds = ['start', 'toys', 'game'];
+
 class App {
   private static container: HTMLElement = document.body;
   private header: Header;
   private footer: Footer;
+  private bgMusic: HTMLAudioElement;
+  static page: ToysPage | GamePage | StartPage | null;
 
   static renderNewPage(idPage: string) {
     const currentPageHTML = document.querySelector(`#${PageIds.defaultPageID}`);
     if (currentPageHTML) currentPageHTML.remove();
-    let page: Page | null = null;
+    this.page = null;
 
     switch (idPage) {
       case PageIds.startPage:
-        page = new StartPage(idPage);
+        this.page = new StartPage(idPage);
         break;
       case PageIds.gamePage:
-        page = new GamePage(idPage);
+        this.page = new GamePage(idPage);
         break;
       case PageIds.toysPage:
-        page = new ToysPage(idPage);
+        this.page = new ToysPage(idPage);
         break;
       default:
-        page = new ErrorPage(idPage);
+        this.page = new ErrorPage(idPage);
         break;
     }
 
-    if (page) {
-      const pageHTML = page.render();
+    if (this.page) {
+      const pageHTML = this.page.render();
       pageHTML.id = PageIds.defaultPageID;
-      pageHTML.className = `${page.id}-page`;
+      pageHTML.className = validPageIds.includes(this.page.id)
+        ? `${this.page.id}-page`
+        : 'error-page';
       App.container.append(pageHTML);
     }
   }
@@ -56,14 +61,57 @@ class App {
     else App.renderNewPage(PageIds.startPage);
   }
 
+  private enableSaveToysSettings() {
+    window.addEventListener('hashchange', () => {
+      if (App.page instanceof ToysPage)
+        (App.page as ToysPage).saveToysSettings();
+    });
+    window.addEventListener('beforeunload', () =>
+      (App.page as ToysPage).saveToysSettings()
+    );
+  }
+
+  private enableSwitchMusic() {
+    if (App.page instanceof GamePage) {
+      (App.page as GamePage).gameSettings.musicSwitch.addEventListener(
+        'click',
+        () => {
+          if (this.bgMusic.paused) {
+            this.bgMusic.play();
+            localStorage.setItem('bgAudio', '1');
+          } else {
+            this.bgMusic.pause();
+            localStorage.removeItem('bgAudio');
+          }
+        }
+      );
+    }
+  }
+
+  private enableRestoreMusicPlaying() {
+    if (localStorage.getItem('bgAudio')) {
+      window.addEventListener('click', () => this.bgMusic.play(), {
+        once: true,
+      });
+    }
+  }
+
   private enableRouteChange() {
-    window.addEventListener('load', this.renderCurrentPage);
-    window.addEventListener('hashchange', this.renderCurrentPage);
+    window.addEventListener('load', () => {
+      this.renderCurrentPage();
+      this.enableSwitchMusic();
+      this.enableRestoreMusicPlaying();
+    });
+    window.addEventListener('hashchange', () => {
+      this.renderCurrentPage();
+      this.enableSwitchMusic();
+    });
   }
 
   constructor() {
     this.header = new Header('header', 'header');
     this.footer = new Footer('footer', 'footer');
+    this.bgMusic = new Audio('./assets/audio/audio.mp3');
   }
 
   static enableHighlightNavButtons() {
@@ -84,7 +132,10 @@ class App {
 
   run() {
     App.container.append(this.header.render());
+    this.enableSaveToysSettings();
+
     this.enableRouteChange();
+
     App.container.append(this.footer.render());
     App.enableHighlightNavButtons();
   }

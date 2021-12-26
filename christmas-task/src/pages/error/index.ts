@@ -6,6 +6,7 @@ class ErrorPage extends Page {
   }
   render() {
     const title = this.createTitle(Page.titlesObject.errorPage);
+    title.className = 'error-message button border-rounded';
     this.container.append(title);
     return this.container;
   }

@@ -40,7 +40,6 @@ class ToysPage extends Page {
     this.enableSearch();
     this.enableFiltersReset();
     this.enableSelectionReset();
-    this.enableSaveDisplayToysSettings();
 
     this.restoreSorting();
     this.restoreFilters();
@@ -194,19 +193,17 @@ class ToysPage extends Page {
     });
   }
 
-  private enableSaveDisplayToysSettings() {
-    const saveDisplayToysSettings = () => {
-      localStorage.setItem(
-        'displayToysSettings',
-        JSON.stringify(this.toysBlock.displaySettingsKeys)
-      );
+  saveToysSettings() {
+    localStorage.setItem(
+      'displayToysSettings',
+      JSON.stringify(this.toysBlock.displaySettingsKeys)
+    );
+    if (this.toysBlock.selectedToysNumbers.length) {
       localStorage.setItem(
         'selectedToysNumbers',
         JSON.stringify(this.toysBlock.selectedToysNumbers)
       );
-    };
-    window.addEventListener('hashchange', saveDisplayToysSettings);
-    window.addEventListener('beforeunload', saveDisplayToysSettings);
+    } else localStorage.removeItem('selectedToysNumbers');
   }
 }
 
