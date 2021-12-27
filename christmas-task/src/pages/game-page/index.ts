@@ -121,7 +121,7 @@ class GamePage extends Page {
     );
   }
 
-  private enableDragToy(toyImage: HTMLElement) {
+  private enableDragToy(toyCard: HTMLElement, toyImage: HTMLElement) {
     toyImage.addEventListener('dragstart', (event) => {
       const shiftX = toyImage.getBoundingClientRect().left;
       const shiftY = toyImage.getBoundingClientRect().top;
@@ -129,7 +129,7 @@ class GamePage extends Page {
       toyImage.style.position = 'absolute';
       toyImage.style.width = '3vw';
 
-      this.gamePanel.toysBlock.append(toyImage);
+      document.body.append(toyImage);
 
       const moveAt = (pageX: number, pageY: number) => {
         toyImage.style.left = pageX - shiftX + 'px';
@@ -139,22 +139,31 @@ class GamePage extends Page {
       moveAt(event.pageX, event.pageY);
 
       const onMouseMove = (event: MouseEvent) => {
-        moveAt(event.pageX, event.pageY);
+        moveAt(
+          event.pageX + shiftX - toyImage.offsetWidth / 2,
+          event.pageY + shiftY - toyImage.offsetHeight / 2
+        );
       };
 
       document.addEventListener('mousemove', onMouseMove);
 
       toyImage.addEventListener('mouseup', (event) => {
+        document.removeEventListener('mousemove', onMouseMove);
         toyImage.hidden = true;
+        this.enableDragToy(toyCard, toyImage);
         if (
           document.elementFromPoint(event.clientX, event.clientY)?.tagName ===
           'AREA'
         ) {
-          document.removeEventListener('mousemove', onMouseMove);
+          toyImage.hidden = false;
           toyImage.onmouseup = null;
-        } else return;
+        } else {
+          toyImage.hidden = false;
+          toyImage.removeAttribute('style');
+          toyCard.append(toyImage);
 
-        toyImage.hidden = false;
+          return;
+        }
       });
     });
 
@@ -165,7 +174,7 @@ class GamePage extends Page {
     this.gamePanel.toysBlock.childNodes.forEach((toyCard) => {
       const toys = toyCard.childNodes;
       toys.forEach((toy) => {
-        this.enableDragToy(toy as HTMLElement);
+        this.enableDragToy(toyCard as HTMLElement, toy as HTMLElement);
       });
     });
   }
