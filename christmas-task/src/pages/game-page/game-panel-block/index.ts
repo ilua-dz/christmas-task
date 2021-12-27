@@ -31,6 +31,10 @@ class GamePanel extends Component {
     toysOptions.forEach((toyCard, toyNumberInSet) => {
       const toyNumber = selectedToysNumbers[toyNumberInSet];
       const toyAmount = data[toyNumber - 1].count;
+
+      (toyCard.firstChild as HTMLElement).draggable = true;
+      for (let i = 1; i < +toyAmount; i++)
+        toyCard.prepend((toyCard.firstChild as Node).cloneNode());
       toyCard.setAttribute('data-amount', toyAmount);
 
       const toyAmountIndicator = document.createElement('div');
@@ -44,13 +48,6 @@ class GamePanel extends Component {
     this.toysBlock.className = 'selected-toys-block';
 
     this.container.append(title, this.toysBlock);
-  }
-
-  renderDecoratedTreesBlock() {
-    const title = document.createElement('h3');
-    title.textContent = 'Ваши ёлки';
-
-    this.container.append(title);
   }
 }
 

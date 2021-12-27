@@ -23,13 +23,16 @@ class GameField extends Component {
     this.lightsContainer = document.createElement('div');
     this.lightsContainer.className = 'lights-container';
 
+    const map = createTreeMap();
+
     this.treeImage = document.createElement('img');
     this.treeImage.className = 'tree-image';
     this.treeImage.src = `./assets/tree/${treeNumber}.webp`;
+    this.treeImage.useMap = `#${map.id}`;
 
     this.lightsContainer.append(this.treeImage);
 
-    this.container.append(this.lightsContainer);
+    this.container.append(this.lightsContainer, map);
   }
 
   switchSnow(direction: boolean) {
@@ -90,6 +93,15 @@ const getLightsLine = (radius: number) => {
     lights.append(light);
   }
   return lights;
+};
+
+const createTreeMap = () => {
+  const map = document.createElement('map');
+  map.name = 'tree-map';
+  map.id = 'tree-map';
+  map.innerHTML =
+    '<area coords="21,599,240,5,492,614,379,640,248,648,95,633" shape="poly">';
+  return map;
 };
 
 export default GameField;

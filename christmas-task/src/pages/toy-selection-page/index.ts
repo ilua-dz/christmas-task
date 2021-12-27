@@ -189,7 +189,7 @@ class ToysPage extends Page {
 
     resetButton?.addEventListener('click', () => {
       this.toysBlock.resetToysSelection();
-      localStorage.clear();
+      // localStorage.clear();
     });
   }
 

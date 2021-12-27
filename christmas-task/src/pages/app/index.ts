@@ -112,6 +112,7 @@ class App {
     this.header = new Header('header', 'header');
     this.footer = new Footer('footer', 'footer');
     this.bgMusic = new Audio('./assets/audio/audio.mp3');
+    this.bgMusic.onended = () => this.bgMusic.play();
   }
 
   static enableHighlightNavButtons() {

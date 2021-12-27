@@ -47,13 +47,14 @@ class GamePage extends Page {
     this.enableTreeChange();
 
     this.gamePanel.renderToysBlock();
-    this.gamePanel.renderDecoratedTreesBlock();
 
     this.container.append(
       this.gameSettings.render(),
       this.gameField.render(),
       this.gamePanel.render()
     );
+
+    this.enableDragToys();
 
     return this.container;
   }
@@ -112,13 +113,61 @@ class GamePage extends Page {
             this.gameSettings.lightsSwitch.classList.toggle('active-switch');
             localStorage.setItem('lights', '1');
           }
-
           if (lightsColors[optionNum]) {
             localStorage.setItem('lightsColor', lightsColors[optionNum]);
           } else localStorage.removeItem('lightsColor');
         });
       }
     );
+  }
+
+  private enableDragToy(toyImage: HTMLElement) {
+    toyImage.addEventListener('dragstart', (event) => {
+      const shiftX = toyImage.getBoundingClientRect().left;
+      const shiftY = toyImage.getBoundingClientRect().top;
+
+      toyImage.style.position = 'absolute';
+      toyImage.style.width = '3vw';
+
+      this.gamePanel.toysBlock.append(toyImage);
+
+      const moveAt = (pageX: number, pageY: number) => {
+        toyImage.style.left = pageX - shiftX + 'px';
+        toyImage.style.top = pageY - shiftY + 'px';
+      };
+
+      moveAt(event.pageX, event.pageY);
+
+      const onMouseMove = (event: MouseEvent) => {
+        moveAt(event.pageX, event.pageY);
+      };
+
+      document.addEventListener('mousemove', onMouseMove);
+
+      toyImage.addEventListener('mouseup', (event) => {
+        toyImage.hidden = true;
+        if (
+          document.elementFromPoint(event.clientX, event.clientY)?.tagName ===
+          'AREA'
+        ) {
+          document.removeEventListener('mousemove', onMouseMove);
+          toyImage.onmouseup = null;
+        } else return;
+
+        toyImage.hidden = false;
+      });
+    });
+
+    toyImage.ondragstart = () => false;
+  }
+
+  private enableDragToys() {
+    this.gamePanel.toysBlock.childNodes.forEach((toyCard) => {
+      const toys = toyCard.childNodes;
+      toys.forEach((toy) => {
+        this.enableDragToy(toy as HTMLElement);
+      });
+    });
   }
 }
 
