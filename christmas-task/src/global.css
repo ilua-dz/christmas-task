@@ -15,6 +15,7 @@
   --neon-red-color: #f72119;
   --neon-green-color: #39ff14;
   --neon-yellow-color: #fff01f;
+  --neon-blue-color: #0043ff;
   --button-color: rgba(190, 213, 213, 0.3);
 
   --header-icons-size: 2vmax;
@@ -757,6 +758,10 @@ body {
   height: 100%;
   width: 100%;
   object-fit: cover;
+}
+
+.lights-container {
+  position: relative;
 }
 
 @media (max-width: 1320px) {

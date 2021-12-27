@@ -34,8 +34,15 @@ class GamePage extends Page {
     else this.gameField.renderTree(defaults.optionNumber);
 
     if (localStorage.getItem('snow')) this.gameField.switchSnow(true);
+    if (localStorage.getItem('lights')) this.gameField.switchLights(true);
+
+    const savedLightsColor = localStorage.getItem('lightsColor');
+    if (savedLightsColor)
+      this.gameField.changeLightsColor(savedLightsColor as string);
 
     this.enableSnowSwitch();
+    this.enableLightsSwitch();
+    this.enableLightsColorChange();
     this.enableTreeBgChange();
     this.enableTreeChange();
 
@@ -81,6 +88,38 @@ class GamePage extends Page {
       }
     });
   }
+
+  private enableLightsSwitch() {
+    this.gameSettings.lightsSwitch.addEventListener('click', () => {
+      const isLightsOn = localStorage.getItem('lights');
+      if (isLightsOn) {
+        this.gameField.switchLights(false);
+        localStorage.removeItem('lights');
+      } else {
+        this.gameField.switchLights(true);
+        localStorage.setItem('lights', '1');
+      }
+    });
+  }
+
+  private enableLightsColorChange() {
+    this.gameSettings.lightsOptionsBlock.childNodes.forEach(
+      (option, optionNum) => {
+        (option as HTMLElement).addEventListener('click', () => {
+          this.gameField.changeLightsColor(lightsColors[optionNum]);
+          if (!localStorage.getItem('lights')) {
+            this.gameField.switchLights(true);
+            this.gameSettings.lightsSwitch.classList.toggle('active-switch');
+            localStorage.setItem('lights', '1');
+          }
+
+          if (lightsColors[optionNum]) {
+            localStorage.setItem('lightsColor', lightsColors[optionNum]);
+          } else localStorage.removeItem('lightsColor');
+        });
+      }
+    );
+  }
 }
 
 const enableImageChange = (
@@ -97,5 +136,13 @@ const enableImageChange = (
     });
   });
 };
+
+const lightsColors = [
+  '',
+  'var(--neon-red-color)',
+  'var(--neon-yellow-color)',
+  'var(--neon-green-color)',
+  'var(--neon-blue-color)',
+];
 
 export default GamePage;

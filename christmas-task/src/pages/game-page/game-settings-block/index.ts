@@ -87,7 +87,7 @@ class GameSettings extends Component {
   renderSwitches() {
     this.musicSwitch = renderSwitch('fa-music', 'bgAudio');
     this.snowSwitch = renderSwitch('fa-snowflakes', 'snow');
-    this.lightsSwitch = renderSwitch('fa-lights-holiday', 'lightsOn');
+    this.lightsSwitch = renderSwitch('fa-lights-holiday', 'lights');
     const settingsBlock = renderGameSettingsBlock(
       this.musicSwitch,
       this.snowSwitch,
