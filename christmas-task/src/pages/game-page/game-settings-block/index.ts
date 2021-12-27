@@ -1,3 +1,4 @@
+import { defaults } from '..';
 import Component from '../../../core/templates/component';
 
 const renderSwitch = (className: string, localStorageKey: string) => {
@@ -34,23 +35,32 @@ export const getOptionsSet = (
   optionsNumber: number,
   imgPath: string,
   optionClassName: string,
-  localStorageKey?: string
+  localStorageKey?: string,
+  enableHighlight = true
 ) => {
-  const optionImgLinks = [];
+  const optionImgLinks: string[] = [];
   for (let i = 0; i < optionsNumber; i++) {
     optionImgLinks.push(imgPath + (i + 1) + '.webp');
   }
 
   const optionsSet: HTMLElement[] = [];
 
-  // if (localStorageKey && savedOption) {
-  //   const savedOption = localStorage.getItem(localStorageKey);
-  // }
+  let selectedOptionNumber = defaults.optionNumber;
+  if (localStorageKey) {
+    const savedOption = localStorage.getItem(localStorageKey);
+    if (savedOption) selectedOptionNumber = +savedOption;
+  }
 
-  optionImgLinks.forEach((imgLink) => {
+  optionImgLinks.forEach((imgLink, optionNumber) => {
     const option = document.createElement('div');
+    const realOptionNumber = optionNumber + 1;
+
     option.className = optionClassName + ' menu-option';
-    enableHighlightOption(option);
+    if (enableHighlight) enableHighlightOption(option);
+
+    if (enableHighlight && realOptionNumber === selectedOptionNumber) {
+      option.classList.add('active-option');
+    }
 
     const image = document.createElement('img');
     image.src = imgLink;
@@ -94,7 +104,8 @@ class GameSettings extends Component {
     const treeOptions = getOptionsSet(
       treeOptionsNumber,
       './assets/tree/',
-      'tree-option'
+      'tree-option',
+      'treeNumber'
     );
 
     this.treeOptionsBlock = renderGameSettingsBlock(...treeOptions);
@@ -109,7 +120,8 @@ class GameSettings extends Component {
     const bgOptions = getOptionsSet(
       bgOptionsNumber,
       './assets/bg/',
-      'bg-option'
+      'bg-option',
+      'treeBgNumber'
     );
 
     this.bgOptionsBlock = renderGameSettingsBlock(...bgOptions);

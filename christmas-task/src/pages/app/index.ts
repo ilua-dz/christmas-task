@@ -71,7 +71,7 @@ class App {
     );
   }
 
-  private enableSwitchMusic() {
+  private enableMusicSwitch() {
     if (App.page instanceof GamePage) {
       (App.page as GamePage).gameSettings.musicSwitch.addEventListener(
         'click',
@@ -99,12 +99,12 @@ class App {
   private enableRouteChange() {
     window.addEventListener('load', () => {
       this.renderCurrentPage();
-      this.enableSwitchMusic();
+      this.enableMusicSwitch();
       this.enableRestoreMusicPlaying();
     });
     window.addEventListener('hashchange', () => {
       this.renderCurrentPage();
-      this.enableSwitchMusic();
+      this.enableMusicSwitch();
     });
   }
 

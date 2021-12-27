@@ -3,10 +3,10 @@ import GamePanel from './game-panel-block';
 import GameSettings from './game-settings-block';
 import GameField from './game-field';
 
-enum defaults {
-  treeNumber = 1,
-  treeBgNumber = 1,
+export enum defaults {
+  optionNumber = 1,
 }
+
 class GamePage extends Page {
   public gameSettings: GameSettings;
   private gamePanel: GamePanel;
@@ -27,12 +27,15 @@ class GamePage extends Page {
     const savedTreeBgNumber = localStorage.getItem('treeBgNumber');
     if (savedTreeBgNumber)
       this.gameField.renderTreeBackground(+savedTreeBgNumber);
-    else this.gameField.renderTreeBackground(defaults.treeBgNumber);
+    else this.gameField.renderTreeBackground(defaults.optionNumber);
 
     const savedTreeNumber = localStorage.getItem('treeNumber');
     if (savedTreeNumber) this.gameField.renderTree(+savedTreeNumber);
-    else this.gameField.renderTree(defaults.treeNumber);
+    else this.gameField.renderTree(defaults.optionNumber);
 
+    if (localStorage.getItem('snow')) this.gameField.switchSnow(true);
+
+    this.enableSnowSwitch();
     this.enableTreeBgChange();
     this.enableTreeChange();
 
@@ -64,6 +67,19 @@ class GamePage extends Page {
       './assets/bg/',
       'treeBgNumber'
     );
+  }
+
+  private enableSnowSwitch() {
+    this.gameSettings.snowSwitch.addEventListener('click', () => {
+      const isSnowOn = localStorage.getItem('snow');
+      if (isSnowOn) {
+        this.gameField.switchSnow(false);
+        localStorage.removeItem('snow');
+      } else {
+        this.gameField.switchSnow(true);
+        localStorage.setItem('snow', '1');
+      }
+    });
   }
 }
 

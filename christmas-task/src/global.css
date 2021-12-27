@@ -426,7 +426,8 @@ body {
   color: white;
 }
 
-.selected-toy {
+.selected-toy,
+.active-option {
   color: var(--hl-text-color);
   text-shadow: 0 0 6px black;
   box-shadow: var(--neon-green-color) 0px 0.5px 1px 0px,
@@ -629,6 +630,8 @@ body {
   border-radius: 8px;
   border: 2px solid transparent;
   background-color: rgba(190, 213, 213, 0.3);
+  transition: all 0.5s;
+  cursor: pointer;
 }
 
 .lights-color-btn {
@@ -744,6 +747,7 @@ body {
   align-items: center;
   padding: 0;
   width: 50%;
+  overflow: hidden;
 }
 
 .tree-bg {

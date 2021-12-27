@@ -1,3 +1,5 @@
+import './snow.css';
+
 import Component from '../../../core/templates/component';
 
 class GameField extends Component {
@@ -21,6 +23,17 @@ class GameField extends Component {
     this.treeImage.src = `./assets/tree/${treeNumber}.webp`;
 
     this.container.append(this.treeImage);
+  }
+
+  switchSnow(direction: boolean) {
+    if (direction) {
+      const snowArea = document.createElement('div');
+      snowArea.className = 'snowflakes';
+      for (let i = 0; i < 125; i++)
+        snowArea.append(document.createElement('i'));
+
+      this.container.append(snowArea);
+    } else this.container.querySelector('.snowflakes')?.remove();
   }
 }
 

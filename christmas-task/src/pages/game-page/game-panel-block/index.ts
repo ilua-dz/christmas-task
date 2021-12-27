@@ -23,7 +23,9 @@ class GamePanel extends Component {
     const toysOptions = getOptionsSet(
       selectedToysNumbers.length,
       './assets/toys/',
-      'selected-toy-card'
+      'selected-toy-card',
+      undefined,
+      false
     );
 
     toysOptions.forEach((toyCard, toyNumberInSet) => {
