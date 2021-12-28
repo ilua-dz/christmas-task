@@ -36,11 +36,14 @@ export const getOptionsSet = (
   imgPath: string,
   optionClassName: string,
   localStorageKey?: string,
-  enableHighlight = true
+  enableHighlight = true,
+  realOptionNumbers?: number[]
 ) => {
   const optionImgLinks: string[] = [];
   for (let i = 0; i < optionsNumber; i++) {
-    optionImgLinks.push(imgPath + (i + 1) + '.webp');
+    if (realOptionNumbers)
+      optionImgLinks.push(imgPath + realOptionNumbers[i] + '.webp');
+    else optionImgLinks.push(imgPath + (i + 1) + '.webp');
   }
 
   const optionsSet: HTMLElement[] = [];

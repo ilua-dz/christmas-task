@@ -25,7 +25,8 @@ class GamePanel extends Component {
       './assets/toys/',
       'selected-toy-card',
       undefined,
-      false
+      false,
+      selectedToysNumbers
     );
 
     toysOptions.forEach((toyCard, toyNumberInSet) => {
