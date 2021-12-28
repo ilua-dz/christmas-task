@@ -34,10 +34,11 @@
 
 ::-webkit-scrollbar {
   width: 10px;
+  scroll-padding-bottom: 50px;
 }
 
 ::-webkit-scrollbar-track {
-  background-color: transparent;
+  background-color: var(--button-color);
 }
 
 ::-webkit-scrollbar-thumb {
@@ -232,7 +233,8 @@ body {
   align-items: center;
   justify-content: center;
   column-gap: 8px;
-  white-space: nowrap;
+  /* white-space: nowrap; */
+  text-align: center;
   border-radius: 8px;
   border: 2px solid transparent;
   background-color: rgba(190, 213, 213, 0.3);
@@ -576,6 +578,7 @@ body {
   flex-direction: column;
   row-gap: 2vh;
   width: 23%;
+  overflow-y: scroll;
 }
 
 .game-settings p {
@@ -604,7 +607,8 @@ body {
 }
 
 .tree-option {
-  width: 23%;
+  width: 80px;
+  height: 110px;
 }
 
 .tree-option img {
@@ -613,8 +617,8 @@ body {
 }
 
 .bg-option {
-  width: 24%;
-  height: 10vh;
+  width: 80px;
+  height: 80px;
 }
 
 .bg-option img {
@@ -689,14 +693,27 @@ body {
 
 .game-page {
   justify-content: space-between;
+  max-height: 87vh;
 }
 
 .game-panel {
   display: flex;
   flex-direction: column;
   width: 23%;
+  overflow-y: scroll;
   padding-top: 2vh;
   row-gap: 2vh;
+}
+
+.game-panel::-webkit-scrollbar,
+.game-settings::-webkit-scrollbar {
+  width: 5px;
+}
+
+.game-panel,
+.game-settings {
+  border-top-right-radius: initial;
+  border-bottom-right-radius: initial;
 }
 
 .game-panel h3 {
@@ -714,8 +731,8 @@ body {
 
 .selected-toy-card {
   position: relative;
-  width: 28%;
-  height: 10vh;
+  width: 90px;
+  height: 90px;
   border-radius: 15%;
 }
 
@@ -728,16 +745,16 @@ body {
 
 .toy-amount-indicator {
   position: absolute;
-  width: 30%;
-  height: 35%;
+  width: 25px;
+  height: 25px;
   right: -3%;
   bottom: -3%;
   display: flex;
   justify-content: center;
   align-items: center;
   background-color: var(--main-font-color);
-  font-size: 90%;
-  font-family: fantasy;
+  font-size: 2vh;
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
   border-radius: 50%;
   border: 1px solid;
   color: var(--bg-color);
@@ -777,6 +794,16 @@ body {
 
   .filter-settings {
     min-width: 32vw;
+  }
+}
+
+@media (max-width: 1150px) {
+  .game-panel {
+    width: 15%;
+  }
+
+  .tree-container {
+    width: 60%;
   }
 }
 

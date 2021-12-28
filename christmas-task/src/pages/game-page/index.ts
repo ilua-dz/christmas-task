@@ -138,7 +138,7 @@ class GamePage extends Page {
         this.gameField.lightsContainer.getBoundingClientRect().top;
 
       toyImage.style.position = 'absolute';
-      toyImage.style.width = '3vw';
+      toyImage.style.width = '6vh';
 
       this.gameField.lightsContainer.append(toyImage);
 
