@@ -71,19 +71,34 @@ class App {
     );
   }
 
+  private switchMusic() {
+    if (this.bgMusic.paused) {
+      this.bgMusic.play();
+      localStorage.setItem('bgAudio', '1');
+    } else {
+      this.bgMusic.pause();
+      localStorage.removeItem('bgAudio');
+    }
+  }
+
+  private enableMusicStop() {
+    if (App.page instanceof GamePage) {
+      (App.page as GamePage).gameSettings.resetButton.addEventListener(
+        'click',
+        () => {
+          console.log('yes');
+          this.bgMusic.pause();
+          this.bgMusic.currentTime = 0;
+        }
+      );
+    }
+  }
+
   private enableMusicSwitch() {
     if (App.page instanceof GamePage) {
       (App.page as GamePage).gameSettings.musicSwitch.addEventListener(
         'click',
-        () => {
-          if (this.bgMusic.paused) {
-            this.bgMusic.play();
-            localStorage.setItem('bgAudio', '1');
-          } else {
-            this.bgMusic.pause();
-            localStorage.removeItem('bgAudio');
-          }
-        }
+        () => this.switchMusic()
       );
     }
   }
@@ -100,11 +115,13 @@ class App {
     window.addEventListener('load', () => {
       this.renderCurrentPage();
       this.enableMusicSwitch();
+      this.enableMusicStop();
       this.enableRestoreMusicPlaying();
     });
     window.addEventListener('hashchange', () => {
       this.renderCurrentPage();
       this.enableMusicSwitch();
+      this.enableMusicStop();
     });
   }
 

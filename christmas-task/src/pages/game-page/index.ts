@@ -23,6 +23,7 @@ class GamePage extends Page {
     this.gameSettings.renderTreeOptions();
     this.gameSettings.renderBgOptions();
     this.gameSettings.renderLightsOptions();
+    this.gameSettings.renderResetButton();
 
     const savedTreeBgNumber = localStorage.getItem('treeBgNumber');
     if (savedTreeBgNumber)
@@ -45,6 +46,7 @@ class GamePage extends Page {
     this.enableLightsColorChange();
     this.enableTreeBgChange();
     this.enableTreeChange();
+    this.enableResetSettings();
 
     this.gamePanel.renderToysBlock();
 
@@ -123,6 +125,10 @@ class GamePage extends Page {
 
   private enableDragToy(toyCard: HTMLElement, toyImage: HTMLElement) {
     toyImage.addEventListener('dragstart', (event) => {
+      const toyIndicator = toyCard.querySelector(
+        '.toy-amount-indicator'
+      ) as HTMLElement;
+
       const shiftX = toyImage.getBoundingClientRect().left;
       const shiftY = toyImage.getBoundingClientRect().top;
 
@@ -150,7 +156,8 @@ class GamePage extends Page {
       toyImage.addEventListener('mouseup', (event) => {
         document.removeEventListener('mousemove', onMouseMove);
         toyImage.hidden = true;
-        this.enableDragToy(toyCard, toyImage);
+        toyIndicator.textContent = `${toyCard.querySelectorAll('img').length}`;
+        // this.enableDragToy(toyCard, toyImage);
         if (
           document.elementFromPoint(event.clientX, event.clientY)?.tagName ===
           'AREA'
@@ -161,13 +168,15 @@ class GamePage extends Page {
           toyImage.hidden = false;
           toyImage.removeAttribute('style');
           toyCard.append(toyImage);
-
+          toyIndicator.textContent = `${
+            toyCard.querySelectorAll('img').length
+          }`;
           return;
         }
       });
     });
 
-    toyImage.ondragstart = () => false;
+    // toyImage.ondragstart = () => false;
   }
 
   private enableDragToys() {
@@ -176,6 +185,13 @@ class GamePage extends Page {
       toys.forEach((toy) => {
         this.enableDragToy(toyCard as HTMLElement, toy as HTMLElement);
       });
+    });
+  }
+
+  private enableResetSettings() {
+    this.gameSettings.resetButton.addEventListener('click', () => {
+      localStorage.clear();
+      window.dispatchEvent(new HashChangeEvent('hashchange'));
     });
   }
 }

@@ -80,6 +80,7 @@ class GameSettings extends Component {
   public treeOptionsBlock!: HTMLElement;
   public bgOptionsBlock!: HTMLElement;
   public lightsOptionsBlock!: HTMLElement;
+  public resetButton!: HTMLElement;
   constructor(tagName: string, className: string) {
     super(tagName, className);
   }
@@ -144,6 +145,14 @@ class GameSettings extends Component {
     this.lightsOptionsBlock = renderGameSettingsBlock(...lightsOptions);
 
     this.container.append(title, this.lightsOptionsBlock);
+  }
+
+  renderResetButton() {
+    this.resetButton = document.createElement('div');
+    this.resetButton.className = 'button reset-button';
+    this.resetButton.textContent = 'Сбросить настройки';
+
+    this.container.append(this.resetButton);
   }
 }
 
