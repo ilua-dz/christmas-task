@@ -86,7 +86,6 @@ class App {
       (App.page as GamePage).gameSettings.resetButton.addEventListener(
         'click',
         () => {
-          console.log('yes');
           this.bgMusic.pause();
           this.bgMusic.currentTime = 0;
         }

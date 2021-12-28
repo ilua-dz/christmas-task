@@ -132,17 +132,22 @@ class GamePage extends Page {
       const shiftX = toyImage.getBoundingClientRect().left;
       const shiftY = toyImage.getBoundingClientRect().top;
 
+      const treeShiftX =
+        this.gameField.lightsContainer.getBoundingClientRect().left;
+      const treeShiftY =
+        this.gameField.lightsContainer.getBoundingClientRect().top;
+
       toyImage.style.position = 'absolute';
       toyImage.style.width = '3vw';
 
-      document.body.append(toyImage);
+      this.gameField.lightsContainer.append(toyImage);
 
       const moveAt = (pageX: number, pageY: number) => {
-        toyImage.style.left = pageX - shiftX + 'px';
-        toyImage.style.top = pageY - shiftY + 'px';
+        toyImage.style.left = pageX - shiftX - treeShiftX + 'px';
+        toyImage.style.top = pageY - shiftY - treeShiftY + 'px';
       };
 
-      moveAt(event.pageX, event.pageY);
+      moveAt(event.pageX - treeShiftX, event.pageY - treeShiftY);
 
       const onMouseMove = (event: MouseEvent) => {
         moveAt(
