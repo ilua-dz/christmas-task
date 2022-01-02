@@ -3,6 +3,8 @@ import GamePanel from './game-panel-block';
 import GameSettings from './game-settings-block';
 import GameField from './game-field';
 
+import LSKeys from './utils/LSKeys';
+
 export enum defaults {
   optionNumber = 1,
 }
@@ -25,19 +27,19 @@ class GamePage extends Page {
     this.gameSettings.renderLightsOptions();
     this.gameSettings.renderResetButton();
 
-    const savedTreeBgNumber = localStorage.getItem('treeBgNumber');
+    const savedTreeBgNumber = localStorage.getItem(LSKeys.treeBgNumber);
     if (savedTreeBgNumber)
       this.gameField.renderTreeBackground(+savedTreeBgNumber);
     else this.gameField.renderTreeBackground(defaults.optionNumber);
 
-    const savedTreeNumber = localStorage.getItem('treeNumber');
+    const savedTreeNumber = localStorage.getItem(LSKeys.treeNumber);
     if (savedTreeNumber) this.gameField.renderTree(+savedTreeNumber);
     else this.gameField.renderTree(defaults.optionNumber);
 
-    if (localStorage.getItem('snow')) this.gameField.switchSnow(true);
-    if (localStorage.getItem('lights')) this.gameField.switchLights(true);
+    if (localStorage.getItem(LSKeys.snow)) this.gameField.switchSnow(true);
+    if (localStorage.getItem(LSKeys.lights)) this.gameField.switchLights(true);
 
-    const savedLightsColor = localStorage.getItem('lightsColor');
+    const savedLightsColor = localStorage.getItem(LSKeys.lightsColor);
     if (savedLightsColor)
       this.gameField.changeLightsColor(savedLightsColor as string);
 
@@ -66,7 +68,7 @@ class GamePage extends Page {
       this.gameSettings.treeOptionsBlock,
       this.gameField.treeImage,
       './assets/tree/',
-      'treeNumber'
+      LSKeys.treeNumber
     );
   }
 
@@ -75,32 +77,32 @@ class GamePage extends Page {
       this.gameSettings.bgOptionsBlock,
       this.gameField.bgImage,
       './assets/bg/',
-      'treeBgNumber'
+      LSKeys.treeBgNumber
     );
   }
 
   private enableSnowSwitch() {
     this.gameSettings.snowSwitch.addEventListener('click', () => {
-      const isSnowOn = localStorage.getItem('snow');
+      const isSnowOn = localStorage.getItem(LSKeys.snow);
       if (isSnowOn) {
         this.gameField.switchSnow(false);
-        localStorage.removeItem('snow');
+        localStorage.removeItem(LSKeys.snow);
       } else {
         this.gameField.switchSnow(true);
-        localStorage.setItem('snow', '1');
+        localStorage.setItem(LSKeys.snow, '1');
       }
     });
   }
 
   private enableLightsSwitch() {
     this.gameSettings.lightsSwitch.addEventListener('click', () => {
-      const isLightsOn = localStorage.getItem('lights');
+      const isLightsOn = localStorage.getItem(LSKeys.lights);
       if (isLightsOn) {
         this.gameField.switchLights(false);
-        localStorage.removeItem('lights');
+        localStorage.removeItem(LSKeys.lights);
       } else {
         this.gameField.switchLights(true);
-        localStorage.setItem('lights', '1');
+        localStorage.setItem(LSKeys.lights, '1');
       }
     });
   }
@@ -110,14 +112,14 @@ class GamePage extends Page {
       (option, optionNum) => {
         (option as HTMLElement).addEventListener('click', () => {
           this.gameField.changeLightsColor(lightsColors[optionNum]);
-          if (!localStorage.getItem('lights')) {
+          if (!localStorage.getItem(LSKeys.lights)) {
             this.gameField.switchLights(true);
             this.gameSettings.lightsSwitch.classList.toggle('active-switch');
-            localStorage.setItem('lights', '1');
+            localStorage.setItem(LSKeys.lights, '1');
           }
           if (lightsColors[optionNum]) {
-            localStorage.setItem('lightsColor', lightsColors[optionNum]);
-          } else localStorage.removeItem('lightsColor');
+            localStorage.setItem(LSKeys.lightsColor, lightsColors[optionNum]);
+          } else localStorage.removeItem(LSKeys.lightsColor);
         });
       }
     );
@@ -162,7 +164,7 @@ class GamePage extends Page {
         document.removeEventListener('mousemove', onMouseMove);
         toyImage.hidden = true;
         toyIndicator.textContent = `${toyCard.querySelectorAll('img').length}`;
-        // this.enableDragToy(toyCard, toyImage);
+
         if (
           document.elementFromPoint(event.clientX, event.clientY)?.tagName ===
           'AREA'
@@ -180,8 +182,6 @@ class GamePage extends Page {
         }
       });
     });
-
-    // toyImage.ondragstart = () => false;
   }
 
   private enableDragToys() {

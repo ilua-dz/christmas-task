@@ -1,5 +1,6 @@
 import { defaults } from '..';
 import Component from '../../../core/templates/component';
+import LSKeys from '../utils/LSKeys';
 
 const renderSwitch = (className: string, localStorageKey: string) => {
   const switchHTML = document.createElement('i');
@@ -89,9 +90,9 @@ class GameSettings extends Component {
   }
 
   renderSwitches() {
-    this.musicSwitch = renderSwitch('fa-music', 'bgAudio');
-    this.snowSwitch = renderSwitch('fa-snowflakes', 'snow');
-    this.lightsSwitch = renderSwitch('fa-lights-holiday', 'lights');
+    this.musicSwitch = renderSwitch('fa-music', LSKeys.bgAudio);
+    this.snowSwitch = renderSwitch('fa-snowflakes', LSKeys.snow);
+    this.lightsSwitch = renderSwitch('fa-lights-holiday', LSKeys.lights);
     const settingsBlock = renderGameSettingsBlock(
       this.musicSwitch,
       this.snowSwitch,
@@ -109,7 +110,7 @@ class GameSettings extends Component {
       treeOptionsNumber,
       './assets/tree/',
       'tree-option',
-      'treeNumber'
+      LSKeys.treeNumber
     );
 
     this.treeOptionsBlock = renderGameSettingsBlock(...treeOptions);
@@ -125,7 +126,7 @@ class GameSettings extends Component {
       bgOptionsNumber,
       './assets/bg/',
       'bg-option',
-      'treeBgNumber'
+      LSKeys.treeBgNumber
     );
 
     this.bgOptionsBlock = renderGameSettingsBlock(...bgOptions);

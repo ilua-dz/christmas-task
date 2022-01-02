@@ -233,11 +233,14 @@ body {
   align-items: center;
   justify-content: center;
   column-gap: 8px;
-  /* white-space: nowrap; */
   text-align: center;
   border-radius: 8px;
   border: 2px solid transparent;
   background-color: rgba(190, 213, 213, 0.3);
+}
+
+.sort-option {
+  white-space: nowrap;
 }
 
 .sort-option i {
@@ -390,8 +393,6 @@ body {
 .toy-card {
   z-index: 2;
   width: 23.9%;
-  /* min-width: 335px; */
-  /* min-height: 220px; */
   padding: 1vh 0.5vw 2vh 0.5vw;
   display: flex;
   justify-content: space-evenly;
@@ -693,7 +694,9 @@ body {
 
 .game-page {
   justify-content: space-between;
-  max-height: 87vh;
+  max-height: calc(
+    100vh - 2 * var(--nav-buttons-font-size) * 1.33 - 3.6vmax - 8px
+  );
 }
 
 .game-panel {

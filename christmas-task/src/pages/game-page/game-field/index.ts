@@ -3,6 +3,23 @@ import './lights.css';
 
 import Component from '../../../core/templates/component';
 
+const enum lightsOptions {
+  startAngle = 70,
+  endAngle = 113,
+  angleStep = 10,
+  startRadius = 100,
+  endRadius = 600,
+  radiusStep = 100,
+  treeImageWidth = 500,
+  multicolorColorsAmount = 3,
+  cssTransition = 500,
+}
+
+const enum snowOptions {
+  density = 125,
+  cssTransition = 500,
+}
+
 class GameField extends Component {
   public treeImage!: HTMLImageElement;
   public bgImage!: HTMLImageElement;
@@ -39,7 +56,7 @@ class GameField extends Component {
     if (direction) {
       const snowArea = document.createElement('div');
       snowArea.className = 'snowflakes';
-      for (let i = 0; i < 125; i++)
+      for (let i = 0; i < snowOptions.density; i++)
         snowArea.append(document.createElement('i'));
 
       this.container.append(snowArea);
@@ -50,13 +67,17 @@ class GameField extends Component {
       snowArea.style.opacity = '0';
       setTimeout(() => {
         snowArea.remove();
-      }, 500);
+      }, snowOptions.cssTransition);
     }
   }
 
   switchLights(direction: boolean) {
     if (direction) {
-      for (let i = 100; i <= 600; i += 100)
+      for (
+        let i = lightsOptions.startRadius;
+        i <= lightsOptions.endRadius;
+        i += lightsOptions.radiusStep
+      )
         this.lightsContainer.append(getLightsLine(i));
     } else {
       const lights = this.container.querySelectorAll<HTMLElement>('.lightrope');
@@ -64,19 +85,17 @@ class GameField extends Component {
         lightsLine.style.opacity = '0';
         setTimeout(() => {
           lightsLine.remove();
-        }, 500);
+        }, lightsOptions.cssTransition);
       });
     }
   }
 
   changeLightsColor(color?: string) {
     if (!color) document.documentElement.removeAttribute('style');
-    for (let i = 1; i <= 3; i++) {
-      document.documentElement.style.setProperty(
-        `--lights-color${i}`,
-        color as string
-      );
-    }
+    else
+      for (let i = 1; i <= lightsOptions.multicolorColorsAmount; i++) {
+        document.documentElement.style.setProperty(`--lights-color${i}`, color);
+      }
   }
 }
 
@@ -84,11 +103,15 @@ const getLightsLine = (radius: number) => {
   const lights = document.createElement('ul');
   lights.className = 'lightrope';
 
-  for (let i = 70; i <= 113; i += 9 - radius / 100) {
+  for (
+    let i = lightsOptions.startAngle;
+    i <= lightsOptions.endAngle;
+    i += lightsOptions.angleStep - radius / lightsOptions.radiusStep
+  ) {
     const light = document.createElement('li');
     const posX = radius * Math.cos((i * Math.PI) / 180);
     const posY = radius * Math.sin((i * Math.PI) / 180);
-    light.style.left = `${posX + 250}px`;
+    light.style.left = `${posX + lightsOptions.treeImageWidth / 2}px`;
     light.style.top = `${posY}px`;
     lights.append(light);
   }
