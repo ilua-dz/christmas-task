@@ -11,6 +11,6 @@
     "strict": true,
     "noImplicitAny": true,
     "strictNullChecks": true,
-    "lib": ["es2015", "DOM"]
+    "lib": ["es2021", "DOM"]
   }
 }
