@@ -1,7 +1,8 @@
 {
   "name": "christmas-task",
   "version": "1.0.0",
-  "description": "rolling scopes school js/fe course 2021Q3 stage1 final task",
+  "homepage": "https://ilua-dz.github.io/christmas-task/",
+  "description": "rolling scopes school js/fe course 2021Q3 stage2 task",
   "main": "index.js",
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.6.0",
@@ -14,6 +15,7 @@
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-import": "^2.25.3",
     "eslint-plugin-prettier": "^4.0.0",
+    "gh-pages": "^4.0.0",
     "html-webpack-plugin": "^5.5.0",
     "lodash": "^4.17.21",
     "prettier": "^2.5.1",
@@ -30,7 +32,9 @@
     "dev": "webpack --mode development",
     "build": "webpack --mode production",
     "start": "webpack serve --open --config ./webpack.config.js --env mode=dev",
-    "lint": "eslint . --ext .ts & tsc --noEmit"
+    "lint": "eslint . --ext .ts & tsc --noEmit",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist"
   },
   "author": "Ilya Dzyuin",
   "license": "ISC",
